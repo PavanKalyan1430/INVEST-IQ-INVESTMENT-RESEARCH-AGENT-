@@ -1,6 +1,7 @@
 "use client";
 
-import { TrendingUp, Search, RotateCcw } from "lucide-react";
+import { useState, useEffect } from "react";
+import { TrendingUp, Search, RotateCcw, Moon, Sun } from "lucide-react";
 
 type AppPhase = "idle" | "analyzing" | "done" | "error";
 
@@ -12,6 +13,24 @@ interface NavbarProps {
 }
 
 export default function Navbar({ phase, companyName, onNewSearch, onAnalyze }: NavbarProps) {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (document.documentElement.classList.contains("dark")) {
+      setIsDark(true);
+    }
+  }, []);
+
+  const toggleDark = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
   return (
     <header
       style={{
@@ -128,6 +147,35 @@ export default function Navbar({ phase, companyName, onNewSearch, onAnalyze }: N
             <RotateCcw size={14} />
           </button>
         )}
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={toggleDark}
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 8,
+            background: "var(--surface-2)",
+            border: "1px solid var(--border)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            color: "var(--text-3)",
+            transition: "all 0.15s",
+          }}
+          title="Toggle Dark Mode"
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLElement).style.background = "var(--accent-light)";
+            (e.currentTarget as HTMLElement).style.color = "var(--accent)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLElement).style.background = "var(--surface-2)";
+            (e.currentTarget as HTMLElement).style.color = "var(--text-3)";
+          }}
+        >
+          {isDark ? <Sun size={15} /> : <Moon size={15} />}
+        </button>
+
         {/* GitHub */}
         <a
           href="https://github.com"

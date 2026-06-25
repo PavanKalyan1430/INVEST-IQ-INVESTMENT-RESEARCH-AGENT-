@@ -10,6 +10,7 @@ import SentimentCard from "./SentimentCard";
 import RiskCard from "./RiskCard";
 import DecisionCard from "./DecisionCard";
 import SourcesCard from "./SourcesCard";
+import MarketAnalytics from "./MarketAnalytics";
 import { Search, RefreshCw } from "lucide-react";
 
 interface DashboardProps {
@@ -128,6 +129,9 @@ export default function Dashboard({ state, report, companyName, onReset }: Dashb
           radarData={report.charts?.radar || []}
         />
       </div>
+
+      {/* Section 7: Market Analytics & Visualization */}
+      <MarketAnalytics companyName={companyName} />
 
       {/* Section 8: Sources */}
       {report.sources && report.sources.length > 0 && (
