@@ -49,24 +49,24 @@ const getHeatmapColor = (intensity: number) => {
 export default function MarketAnalytics({ companyName }: MarketAnalyticsProps) {
   return (
     <div style={{ marginTop: 40, marginBottom: 24 }} className="fade-in">
-      <h3 style={{ fontSize: 24, fontWeight: 900, color: "#0F172A", marginBottom: 24, letterSpacing: "-0.02em" }}>
+      <h3 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", marginBottom: 24, letterSpacing: "-0.02em" }}>
         Analytics & Visualization
       </h3>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: 24, marginBottom: 16 }}>
         
         {/* Heatmap Card */}
-        <div className="card" style={{ padding: "32px", display: "flex", flexDirection: "column", background: "#FFFFFF", borderRadius: 16, border: "1px solid #E2E8F0", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)" }}>
+        <div className="card" style={{ padding: "32px", display: "flex", flexDirection: "column", background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 18, fontWeight: 800, color: "#0F172A" }}>Sector Performance</span>
+              <span style={{ fontSize: 18, fontWeight: 800, color: "var(--text)" }}>Sector Performance</span>
               <Info size={16} color="#94A3B8" />
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <span style={{ fontSize: 14, fontWeight: 700, color: "#64748B" }}>Date 2026</span>
               <div style={{ width: 120, height: 4, background: "#EEF2FF", borderRadius: 4, position: "relative" }}>
-                <div style={{ position: "absolute", left: "20%", top: -6, width: 16, height: 16, borderRadius: "50%", background: "#FFFFFF", border: "3px solid #6366F1", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }} />
-                <div style={{ width: "20%", height: "100%", background: "#6366F1", borderRadius: 4 }} />
+                <div style={{ position: "absolute", left: "20%", top: -6, width: 16, height: 16, borderRadius: "50%", background: "var(--surface)", border: "3px solid var(--accent)", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }} />
+                <div style={{ width: "20%", height: "100%", background: "var(--accent)", borderRadius: 4 }} />
               </div>
             </div>
           </div>
@@ -119,14 +119,14 @@ export default function MarketAnalytics({ companyName }: MarketAnalyticsProps) {
         </div>
 
         {/* Radar Chart Card */}
-        <div className="card" style={{ padding: "32px", background: "#FFFFFF", borderRadius: 16, border: "1px solid #E2E8F0", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)", position: "relative" }}>
-          <div style={{ fontSize: 18, fontWeight: 800, color: "#0F172A", marginBottom: 24, textAlign: "center" }}>
+        <div className="card" style={{ padding: "32px", background: "var(--surface)", borderRadius: 16, border: "1px solid var(--border)", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)", position: "relative" }}>
+          <div style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", marginBottom: 24, textAlign: "center" }}>
             Multi-Agent Confidence Breakdown
           </div>
           
           <ResponsiveContainer width="100%" height={360}>
             <RadarChart data={radarData} margin={{ top: 20, right: 40, bottom: 20, left: 40 }}>
-              <PolarGrid stroke="#E2E8F0" />
+              <PolarGrid stroke="var(--border)" />
               <PolarAngleAxis dataKey="subject" tick={{ fontSize: 13, fill: "#64748B", fontWeight: 600 }} />
               {/* Hide the default radius axis lines to match the clean image look */}
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
@@ -136,8 +136,8 @@ export default function MarketAnalytics({ companyName }: MarketAnalyticsProps) {
               <Radar name="Risk Agent" dataKey="Risk Agent" stroke="#F43F5E" fill="#F43F5E" fillOpacity={0.1} strokeWidth={2} />
               
               <Tooltip
-                contentStyle={{ background: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: 8, fontSize: 13, boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)" }}
-                labelStyle={{ fontWeight: 700, color: "#0F172A", marginBottom: 4 }}
+                contentStyle={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 13, boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)" }}
+                labelStyle={{ fontWeight: 700, color: "var(--text)", marginBottom: 4 }}
               />
               <Legend 
                 wrapperStyle={{ fontSize: 13, fontWeight: 700, paddingTop: 20 }} 

@@ -15,11 +15,11 @@
   --border: #E2E8F0;
   --border-strong: #CBD5E1;
 
-  /* Accents */
-  --accent: #4F46E5;
-  --accent-hover: #4338CA;
-  --accent-light: #EEF2FF;
-  --accent-text: #4338CA;
+  /* Accents - Deep Violet (Intense) */
+  --accent: #5B21B6;      /* Deep purple */
+  --accent-hover: #4C1D95; /* Darker purple */
+  --accent-light: #F3E8FF; /* Lavender blush */
+  --accent-text: #5B21B6;
 
   /* Semantic */
   --buy: #059669;
@@ -49,21 +49,21 @@
 }
 
 .dark {
-  /* Backgrounds — true premium black */
+  /* Backgrounds — true premium OLED black */
   --bg: #000000;
-  --surface: #0A0A0A;
-  --surface-2: #141414;
-  --surface-hover: #1A1A1A;
+  --surface: #050505;
+  --surface-2: #111111;
+  --surface-hover: #161616;
 
   /* Borders */
-  --border: #222222;
-  --border-strong: #333333;
+  --border: #1F1F1F;
+  --border-strong: #2D2D2D;
 
-  /* Accents */
-  --accent: #6366F1;
-  --accent-hover: #818CF8;
-  --accent-light: rgba(99, 102, 241, 0.15);
-  --accent-text: #A5B4FC;
+  /* Accents - Intense Lavender (Neon) */
+  --accent: #8B5CF6;      /* Bright purple */
+  --accent-hover: #A78BFA; /* Lighter lavender */
+  --accent-light: rgba(139, 92, 246, 0.2); /* Deep translucent lavender */
+  --accent-text: #C4B5FD; /* Soft lavender */
 
   /* Semantic */
   --buy: #10B981;

@@ -28,7 +28,7 @@ const AGENT_META: Record<AgentKey, {
   research: {
     label: "Research Agent",
     role: "Foundation Builder",
-    color: "#4F46E5",
+    color: "var(--accent)",
     icon: Search,
     description: "The first agent to execute in the pipeline. It maps the company's entire public footprint — business model, products, competitors, strengths, and weaknesses — by combining real-time web search with structured company profile data.",
     workflow: "1. Calls Tavily Search API with `search_depth: advanced` returning 5 optimized results.\n2. Calls Finnhub Company Profile API to get name, industry, market cap, exchange.\n3. Concatenates both into a grounded context string (~1,200 tokens).\n4. Sends context to Gemini 2.5 Flash with a CFA analyst persona and strict JSON schema enforcement.\n5. Returns structured CompanyResearch object to LangGraph state.",
@@ -115,7 +115,7 @@ const AGENT_META: Record<AgentKey, {
 function renderValue(val: any, depth = 0): React.ReactNode {
   if (val === null || val === undefined) return <span style={{ color: "var(--text-4)" }}>—</span>;
   if (typeof val === "string") return <span style={{ color: "var(--text-2)" }}>{val}</span>;
-  if (typeof val === "number") return <span style={{ color: "#4F46E5", fontWeight: 700 }}>{val}</span>;
+  if (typeof val === "number") return <span style={{ color: "var(--accent)", fontWeight: 700 }}>{val}</span>;
   if (Array.isArray(val)) {
     if (val.length === 0) return <span style={{ color: "var(--text-4)" }}>[ ]</span>;
     if (typeof val[0] === "string") {

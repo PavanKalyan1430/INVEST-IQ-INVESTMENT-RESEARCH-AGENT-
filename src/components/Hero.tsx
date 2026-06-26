@@ -15,7 +15,7 @@ interface HeroProps {
 }
 
 const AGENTS = [
-  { name: "Research Agent", icon: SearchIcon, color: "#4F46E5", desc: "Searches the web and fetches the company profile, business model, and competitive landscape." },
+  { name: "Research Agent", icon: SearchIcon, color: "var(--accent)", desc: "Searches the web and fetches the company profile, business model, and competitive landscape." },
   { name: "Financial Agent", icon: BarChart3, color: "#0891B2", desc: "Ingests 3 years of balance sheets and income statements to score financial health." },
   { name: "News Agent", icon: Database, color: "#7C3AED", desc: "Aggregates the latest global headlines and classifies news tone." },
   { name: "Sentiment Agent", icon: MessageSquare, color: "#D97706", desc: "Scores market sentiment as Bullish, Bearish, or Neutral from news flows." },
@@ -29,7 +29,7 @@ const WORKFLOW_STEPS = [
     step: "01",
     title: "Enter a Company",
     desc: "Type any publicly listed company name or ticker symbol into the search bar.",
-    color: "#4F46E5",
+    color: "var(--accent)",
   },
   {
     step: "02",
@@ -96,7 +96,7 @@ export default function Hero({ onAnalyze, loading }: HeroProps) {
         {/* Background glow */}
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: "radial-gradient(circle at 60% 20%, rgba(79,70,229,0.07) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(124,58,237,0.05) 0%, transparent 50%)",
+          backgroundImage: "radial-gradient(circle at 60% 20%, rgba(91,33,182,0.12) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(139,92,246,0.08) 0%, transparent 50%)",
           pointerEvents: "none",
         }} />
 
@@ -125,7 +125,7 @@ export default function Hero({ onAnalyze, loading }: HeroProps) {
           }}
         >
           Institutional-Grade Research,{" "}
-          <span style={{ background: "linear-gradient(135deg, #4F46E5, #7C3AED)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--accent), #9333EA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             Powered by AI
           </span>
         </h1>

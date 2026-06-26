@@ -22,7 +22,7 @@ const navItems: { label: string; icon: any; view: ActiveView }[] = [
 ];
 
 const agents: { label: string; key: AgentKey; color: string; role: string }[] = [
-  { label: "Research Agent", key: "research", color: "#4F46E5", role: "Foundation Builder" },
+  { label: "Research Agent", key: "research", color: "var(--accent)", role: "Foundation Builder" },
   { label: "Financial Agent", key: "financial", color: "#0891B2", role: "Quant Analyst" },
   { label: "News Agent", key: "news", color: "#7C3AED", role: "Info Scraper" },
   { label: "Sentiment Agent", key: "sentiment", color: "#D97706", role: "NLP Classifier" },
@@ -74,7 +74,7 @@ export default function Sidebar({
               width: 36,
               height: 36,
               borderRadius: 10,
-              background: "linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)",
+              background: "linear-gradient(135deg, var(--accent) 0%, #9333EA 100%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

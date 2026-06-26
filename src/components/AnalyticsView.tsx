@@ -109,7 +109,7 @@ export default function AnalyticsView({ state, companyName }: AnalyticsViewProps
                 formatter={(v: any) => [`$${Number(v).toFixed(1)}B`, ""]}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="revenue" name="Revenue" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="revenue" name="Revenue" fill="var(--accent)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="profit" name="Profit" fill="#059669" radius={[4, 4, 0, 0]} />
               <Bar dataKey="debt" name="Debt" fill="#DC2626" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -159,7 +159,7 @@ export default function AnalyticsView({ state, companyName }: AnalyticsViewProps
               <PolarGrid stroke="var(--border)" />
               <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: "var(--text-3)" }} />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 10, fill: "var(--text-4)" }} />
-              <Radar name={companyName} dataKey="A" stroke="#4F46E5" fill="#4F46E5" fillOpacity={0.2} strokeWidth={2} />
+              <Radar name={companyName} dataKey="A" stroke="var(--accent)" fill="var(--accent)" fillOpacity={0.2} strokeWidth={2} />
               <Tooltip contentStyle={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
             </RadarChart>
           </ResponsiveContainer>

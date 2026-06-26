@@ -53,7 +53,7 @@ export default function Navbar({ phase, companyName, onNewSearch, onAnalyze }: N
             width: 34,
             height: 34,
             borderRadius: 10,
-            background: "linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)",
+            background: "linear-gradient(135deg, var(--accent) 0%, #9333EA 100%)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -195,9 +195,9 @@ export default function Navbar({ phase, companyName, onNewSearch, onAnalyze }: N
             textDecoration: "none",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "#0F172A";
-            (e.currentTarget as HTMLElement).style.color = "white";
-            (e.currentTarget as HTMLElement).style.borderColor = "#0F172A";
+            (e.currentTarget as HTMLElement).style.background = "var(--text)";
+            (e.currentTarget as HTMLElement).style.color = "var(--bg)";
+            (e.currentTarget as HTMLElement).style.borderColor = "var(--text)";
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLElement).style.background = "var(--surface-2)";
