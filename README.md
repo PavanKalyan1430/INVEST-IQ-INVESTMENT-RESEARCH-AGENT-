@@ -206,23 +206,23 @@ Every file in this repository is documented below.
 
 ### `src/components/` — Frontend UI Components
 
-| Component | File Size | Purpose |
-|-----------|-----------|---------|
-| `Hero.tsx` | 12.2 KB | Landing page with animated search input, feature cards, and call-to-action. |
-| `MissionControl.tsx` | 10.0 KB | Real-time agent execution terminal. Displays live agent status (running/completed), thought bubbles, and discoveries as SSE events arrive. |
-| `Navbar.tsx` | 8.0 KB | Top navigation bar with logo, search indicator, dark mode toggle (☀️/🌙), refresh button, and GitHub link. |
-| `Dashboard.tsx` | 5.2 KB | Master dashboard layout. Composes all card components in a structured grid. |
-| `MarketAnalytics.tsx` | 8.0 KB | Sector Performance Heatmap (CSS Grid) + Multi-Agent Confidence Radar Chart (Recharts). |
-| `RecommendationCard.tsx` | 6.4 KB | Large hero card showing BUY/HOLD/PASS recommendation with confidence gauge. |
-| `DecisionCard.tsx` | 7.8 KB | Bull vs Bear case analysis with pros/cons lists and radar visualization. |
-| `ResearchCard.tsx` | 6.1 KB | Company overview, business model, products, competitors, strengths, and weaknesses. |
-| `FinancialCard.tsx` | 5.6 KB | Revenue/Profit/Debt bar chart (Recharts) with financial health score. |
-| `NewsCard.tsx` | 6.0 KB | Latest news articles with positive/negative classification. |
-| `SentimentCard.tsx` | 5.0 KB | Sentiment distribution visualization with bullish/bearish/neutral breakdown. |
-| `RiskCard.tsx` | 5.1 KB | Five-channel risk matrix (Business, Financial, Market, Legal, Competitive). |
-| `ScoreCards.tsx` | 3.9 KB | Summary score cards row (Financial Score, Sentiment Score, Risk Score, Growth). |
-| `SourcesCard.tsx` | 1.5 KB | Footer card listing all data sources used in the analysis. |
-| `Sidebar.tsx` | 5.0 KB | Left navigation sidebar with phase-aware navigation items. |
+| Component | Purpose |
+|-----------|---------|
+| `Hero.tsx` | Landing page with animated search input, feature cards, and call-to-action. |
+| `MissionControl.tsx` | Real-time agent execution terminal. Displays live agent status (running/completed), thought bubbles, and discoveries as SSE events arrive. |
+| `Navbar.tsx` | Top navigation bar with logo, search indicator, dark mode toggle (☀️/🌙), refresh button, and GitHub link. |
+| `Dashboard.tsx` | Master dashboard layout. Composes all card components in a structured grid. |
+| `MarketAnalytics.tsx` | Sector Performance Heatmap (CSS Grid) + Multi-Agent Confidence Radar Chart (Recharts). |
+| `RecommendationCard.tsx` | Large hero card showing BUY/HOLD/PASS recommendation with confidence gauge. |
+| `DecisionCard.tsx` | Bull vs Bear case analysis with pros/cons lists and radar visualization. |
+| `ResearchCard.tsx` | Company overview, business model, products, competitors, strengths, and weaknesses. |
+| `FinancialCard.tsx` | Revenue/Profit/Debt bar chart (Recharts) with financial health score. |
+| `NewsCard.tsx` | Latest news articles with positive/negative classification. |
+| `SentimentCard.tsx` | Sentiment distribution visualization with bullish/bearish/neutral breakdown. |
+| `RiskCard.tsx` | Five-channel risk matrix (Business, Financial, Market, Legal, Competitive). |
+| `ScoreCards.tsx` | Summary score cards row (Financial Score, Sentiment Score, Risk Score, Growth). |
+| `SourcesCard.tsx` | Footer card listing all data sources used in the analysis. |
+| `Sidebar.tsx` | Left navigation sidebar with phase-aware navigation items. |
 
 ---
 
