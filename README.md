@@ -158,6 +158,20 @@ npm run dev
 
 Access the application at `http://localhost:3000`.
 
+### Running with Docker
+
+Alternatively, you can run the entire application inside a containerized Docker environment:
+
+```bash
+# 1. Build the Docker image
+docker compose build
+
+# 2. Run the container
+docker compose up
+```
+
+Access the application at `http://localhost:3000`.
+
 ### Environment Variables
 
 | Variable | Required | Provider | Free Tier | Purpose |
