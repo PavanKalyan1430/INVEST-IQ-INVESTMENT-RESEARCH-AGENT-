@@ -27,7 +27,7 @@ const radarData = [
 ];
 
 const rows = ["Sector", "Economy", "Company", "Financials", "Health", "Sentiments", "Technology"];
-const cols = ["Low", "Ntin", "Mav", "Okat", "Wlan"];
+const cols = ["Micro", "Small", "Mid", "Large", "Mega"];
 
 // Hardcoded pattern to roughly match the visual density in the user's image
 const heatmapData = [

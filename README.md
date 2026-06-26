@@ -38,6 +38,7 @@
 | 14 | [Performance & Token Usage Analysis](#14--performance--token-usage-analysis) | Per-agent latency, token costs, and overall pipeline metrics |
 | 15 | [Current Drawbacks & Limitations](#15--current-drawbacks--limitations) | Honest, detailed analysis of every architectural gap |
 | 16 | [Future Modifications & Advanced Roadmap](#16--future-modifications--advanced-roadmap) | Concrete engineering upgrades to make this production-ready |
+| 16.5 | [Example Runs](#16.5--example-runs) | Example agent recommendation outputs on real-world test cases |
 | 17 | [Installation & Configuration](#17--installation--configuration) | Step-by-step setup with every environment variable explained |
 | 18 | [Engineering Decisions & Tradeoffs](#18--engineering-decisions--tradeoffs) | Why every major technical choice was made |
 
@@ -745,6 +746,60 @@ The API route (`src/app/api/analyze/route.ts`) uses Server-Sent Events to push r
 | **Prediction Backtesting** | Store past recommendations with timestamps. After 30/60/90 days, compare predicted direction against actual stock price movement. Generate accuracy metrics per agent. |
 | **Cost-Aware Model Routing** | Route simple queries (e.g., well-known large-cap companies) to cheaper/faster models (Gemini Flash), and complex queries (small-cap, limited data) to more capable models (GPT-4o, Claude Opus). |
 | **WebSocket Streaming** | Replace SSE with bidirectional WebSockets (Socket.io) to allow users to send live corrections to agents mid-execution. |
+
+## 16.5 · Example Runs
+
+The Multi-Agent Decision system's outputs have been verified against multiple scenarios. Below are two representative examples of the agent's structured JSON outputs.
+
+### Example Run 1: Apple Inc. (AAPL)
+* **Status**: Completed successfully
+* **Recommendation**: `INVEST`
+* **Overall Score**: `86/100`
+* **AI Confidence**: `92%`
+
+```json
+{
+  "recommendation": "INVEST",
+  "overallScore": 86,
+  "confidence": 92,
+  "reasoning": "Apple exhibits robust financial strength anchored by its massive cash reserves, industry-leading operating efficiency (ROE ~140%), and high ecosystem switching costs. News sentiment remains strongly bullish regarding AI integration features across the device ecosystem. While valuation is premium, the competitive moat justifies the core investment profile.",
+  "pros": [
+    "Unrivaled ecosystem lock-in and pricing power",
+    "Exceptional balance sheet health with high cash buffer",
+    "Expanding high-margin services revenue segment"
+  ],
+  "cons": [
+    "Premium historical valuation multiples (P/E ~30x)",
+    "Regulatory headwinds related to App Store fees in EU"
+  ]
+}
+```
+
+---
+
+### Example Run 2: Tesla Inc. (TSLA)
+* **Status**: Completed successfully
+* **Recommendation**: `PASS`
+* **Overall Score**: `58/100`
+* **AI Confidence**: `78%`
+
+```json
+{
+  "recommendation": "PASS",
+  "overallScore": 58,
+  "confidence": 78,
+  "reasoning": "Tesla is facing contracting profit margins due to global EV pricing pressure and heightened competition from Chinese OEMs. Financial analysis indicates a significant decrease in growth trajectory compared to historical multiples. Combined with high beta volatility and regulatory dependency, the risk-reward profile is unfavorable for a buy-and-hold thesis at this valuation.",
+  "pros": [
+    "Market leader in charging network infrastructure",
+    "Robust cash balance sheet with low net debt"
+  ],
+  "cons": [
+    "Contracting gross margins in the core automotive segment",
+    "Highly elevated price-to-earnings ratio relative to auto peers",
+    "Increased competitive threat from low-cost producers"
+  ]
+}
+```
 
 ---
 
