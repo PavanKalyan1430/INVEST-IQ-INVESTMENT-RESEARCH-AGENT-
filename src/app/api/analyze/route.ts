@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
 import { investIQWorkflow } from '@/graph/workflow';
+import { getFinnhubProfile } from '@/services/finnhub';
+import { validateCompanyQuery } from '@/services/gemini';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,6 +20,17 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Verify company validation with LLM parser before initiating the agent graph stream
+    const validation = await validateCompanyQuery(companyName);
+    if (!validation || !validation.isValid || !validation.ticker) {
+      return new Response(JSON.stringify({ success: false, message: `No valid company found with the name "${companyName}"` }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const resolvedTicker = validation.ticker;
+
     const encoder = new TextEncoder();
     const customStream = new ReadableStream({
       async start(controller) {
@@ -30,9 +43,9 @@ export async function POST(req: NextRequest) {
           sendEvent('thought', 'Searching profile info and web footprints...');
           await sleep(1000);
 
-          const stream = await investIQWorkflow.stream({ companyName });
+          const stream = await investIQWorkflow.stream({ companyName: resolvedTicker });
           let finalReport: any = null;
-          let accumulatedState: any = { companyName };
+          let accumulatedState: any = { companyName: resolvedTicker };
 
           for await (const chunk of stream) {
             // chunk contains updates from the node that executed
