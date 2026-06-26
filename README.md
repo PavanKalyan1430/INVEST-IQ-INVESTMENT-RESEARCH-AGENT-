@@ -16,6 +16,10 @@
 
 </div>
 
+<p align="center">
+  <img src="./Example-runs/thumbnail.png" alt="InvestIQ AI — Autonomous Multi-Agent Equity Research Platform" width="100%" />
+</p>
+
 ---
 
 
