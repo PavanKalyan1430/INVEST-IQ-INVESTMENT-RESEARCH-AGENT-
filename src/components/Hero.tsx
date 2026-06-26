@@ -124,9 +124,9 @@ export default function Hero({ onAnalyze, loading }: HeroProps) {
             color: "var(--text)", animationDelay: "0.05s", opacity: 0, animationFillMode: "forwards",
           }}
         >
-          Institutional-Grade Research,{" "}
+          Autonomous Multi-Agent{" "}
           <span style={{ background: "linear-gradient(135deg, var(--accent), #9333EA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-            Powered by AI
+            Equity Research Platform
           </span>
         </h1>
 
@@ -138,9 +138,9 @@ export default function Hero({ onAnalyze, loading }: HeroProps) {
             animationDelay: "0.1s", opacity: 0, animationFillMode: "forwards", fontWeight: 400,
           }}
         >
-          7 specialized AI agents analyze any public company in under 30 seconds and deliver a
-          transparent <strong style={{ color: "var(--text-2)", fontWeight: 700 }}>INVEST</strong> or{" "}
-          <strong style={{ color: "var(--text-2)", fontWeight: 700 }}>PASS</strong> recommendation.
+          A structured agentic DAG that performs real-time market data mining, risk indexing, and sentiment classification
+          to deliver a transparent <strong style={{ color: "var(--text-2)", fontWeight: 700 }}>INVEST</strong> or{" "}
+          <strong style={{ color: "var(--text-2)", fontWeight: 700 }}>PASS</strong> recommendation for smarter portfolio decisions.
         </p>
 
         {/* Search box */}
