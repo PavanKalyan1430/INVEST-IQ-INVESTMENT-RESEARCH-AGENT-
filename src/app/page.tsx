@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Sidebar from "@/components/Sidebar";
+import Sidebar, { ActiveView, AgentKey } from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import MissionControl from "@/components/MissionControl";
 import Dashboard from "@/components/Dashboard";
+import AnalyticsView from "@/components/AnalyticsView";
+import MarketTrendsView from "@/components/MarketTrendsView";
+import AgentDetailView from "@/components/AgentDetailView";
 import { GraphState, ReportData } from "@/types/graph";
 
 type AppPhase = "idle" | "analyzing" | "done" | "error";
@@ -24,6 +27,11 @@ export default function Home() {
   const [graphState, setGraphState] = useState<GraphState | null>(null);
   const [report, setReport] = useState<ReportData | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
+
+  // View & agent selection state
+  const [activeView, setActiveView] = useState<ActiveView>("dashboard");
+  const [selectedAgent, setSelectedAgent] = useState<AgentKey | null>(null);
+
   const abortRef = useRef<AbortController | null>(null);
 
   const handleAnalyze = async (company: string) => {
@@ -35,6 +43,8 @@ export default function Home() {
     setGraphState(null);
     setReport(null);
     setErrorMsg("");
+    setActiveView("dashboard");
+    setSelectedAgent(null);
 
     abortRef.current = new AbortController();
     try {
@@ -118,25 +128,47 @@ export default function Home() {
     setGraphState(null);
     setReport(null);
     setErrorMsg("");
+    setActiveView("dashboard");
+    setSelectedAgent(null);
   };
+
+  const handleViewChange = (view: ActiveView) => {
+    setActiveView(view);
+    if (view !== "agent-detail") setSelectedAgent(null);
+  };
+
+  const handleAgentClick = (agent: AgentKey) => {
+    setSelectedAgent(agent);
+    setActiveView("agent-detail");
+  };
+
+  const analysisComplete = phase === "done" && !!graphState;
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
-      <Sidebar />
+      <Sidebar
+        activeView={activeView}
+        selectedAgent={selectedAgent}
+        analysisComplete={analysisComplete}
+        onViewChange={handleViewChange}
+        onAgentClick={handleAgentClick}
+      />
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-        <Navbar 
-          phase={phase} 
-          companyName={companyName} 
+        <Navbar
+          phase={phase}
+          companyName={companyName}
           onNewSearch={handleReset}
-          onAnalyze={handleAnalyze} 
+          onAnalyze={handleAnalyze}
         />
 
         <main style={{ flex: 1 }}>
+          {/* IDLE */}
           {phase === "idle" && (
             <Hero onAnalyze={handleAnalyze} loading={false} />
           )}
 
+          {/* ANALYZING */}
           {phase === "analyzing" && (
             <MissionControl
               statusUpdates={statusUpdates}
@@ -145,47 +177,46 @@ export default function Home() {
             />
           )}
 
-          {phase === "done" && report && (
-            <Dashboard
-              state={graphState || { companyName }}
-              report={report}
-              companyName={companyName}
-              onReset={handleReset}
-            />
+          {/* DONE */}
+          {phase === "done" && report && graphState && (
+            <>
+              {activeView === "dashboard" && (
+                <Dashboard
+                  state={graphState}
+                  report={report}
+                  companyName={companyName}
+                  onReset={handleReset}
+                />
+              )}
+              {activeView === "analytics" && (
+                <AnalyticsView state={graphState} companyName={companyName} />
+              )}
+              {activeView === "market-trends" && (
+                <MarketTrendsView state={graphState} companyName={companyName} />
+              )}
+              {activeView === "agent-detail" && selectedAgent && (
+                <AgentDetailView
+                  state={graphState}
+                  selectedAgent={selectedAgent}
+                  onBack={() => handleViewChange("dashboard")}
+                />
+              )}
+            </>
           )}
 
+          {/* ERROR */}
           {phase === "error" && (
-            <div
-              style={{
-                minHeight: "calc(100vh - 64px)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 24,
-              }}
-            >
+            <div style={{ minHeight: "calc(100vh - 64px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
               <div
                 className="card fade-in"
-                style={{
-                  maxWidth: 480,
-                  width: "100%",
-                  padding: 32,
-                  textAlign: "center",
-                  border: "1px solid var(--pass-border)",
-                  background: "var(--surface)",
-                }}
+                style={{ maxWidth: 480, width: "100%", padding: 32, textAlign: "center", border: "1px solid var(--pass-border)", background: "var(--surface)" }}
               >
                 <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
                 <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8, color: "var(--pass)" }}>Analysis Failed</h3>
                 <p style={{ fontSize: 14, color: "var(--text-3)", marginBottom: 24, lineHeight: 1.6 }}>
                   {errorMsg || "Could not complete the analysis. Please check the company name and try again."}
                 </p>
-                <button
-                  onClick={handleReset}
-                  className="btn-primary"
-                >
-                  Try Again
-                </button>
+                <button onClick={handleReset} className="btn-primary">Try Again</button>
               </div>
             </div>
           )}

@@ -1,27 +1,51 @@
 "use client";
 
-import { LayoutDashboard, TrendingUp, Activity, Settings, Sparkles, ChevronRight } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { LayoutDashboard, TrendingUp, Activity, ChevronRight, Bot, Cpu } from "lucide-react";
 
-const navItems = [
-  { label: "Dashboard", icon: LayoutDashboard, href: "/" },
-  { label: "Analytics", icon: Activity, href: "/" },
-  { label: "Market Trends", icon: TrendingUp, href: "/" },
+export type ActiveView = "dashboard" | "analytics" | "market-trends" | "agent-detail";
+
+export const AGENT_KEYS = [
+  "research",
+  "financial",
+  "news",
+  "sentiment",
+  "risk",
+  "decision",
+  "report",
+] as const;
+export type AgentKey = (typeof AGENT_KEYS)[number];
+
+const navItems: { label: string; icon: any; view: ActiveView }[] = [
+  { label: "Dashboard", icon: LayoutDashboard, view: "dashboard" },
+  { label: "Analytics", icon: Activity, view: "analytics" },
+  { label: "Market Trends", icon: TrendingUp, view: "market-trends" },
 ];
 
-const agents = [
-  { label: "Research Agent", color: "#4F46E5" },
-  { label: "Financial Agent", color: "#0891B2" },
-  { label: "News Agent", color: "#7C3AED" },
-  { label: "Sentiment Agent", color: "#D97706" },
-  { label: "Risk Agent", color: "#DC2626" },
-  { label: "Decision Agent", color: "#059669" },
-  { label: "Report Agent", color: "#374151" },
+const agents: { label: string; key: AgentKey; color: string; role: string }[] = [
+  { label: "Research Agent", key: "research", color: "#4F46E5", role: "Foundation Builder" },
+  { label: "Financial Agent", key: "financial", color: "#0891B2", role: "Quant Analyst" },
+  { label: "News Agent", key: "news", color: "#7C3AED", role: "Info Scraper" },
+  { label: "Sentiment Agent", key: "sentiment", color: "#D97706", role: "NLP Classifier" },
+  { label: "Risk Agent", key: "risk", color: "#DC2626", role: "Risk Officer" },
+  { label: "Decision Agent", key: "decision", color: "#059669", role: "Portfolio Manager" },
+  { label: "Report Agent", key: "report", color: "#6B7280", role: "Publisher" },
 ];
 
-export default function Sidebar() {
-  const pathname = usePathname();
+interface SidebarProps {
+  activeView: ActiveView;
+  selectedAgent: AgentKey | null;
+  analysisComplete: boolean;
+  onViewChange: (view: ActiveView) => void;
+  onAgentClick: (agent: AgentKey) => void;
+}
 
+export default function Sidebar({
+  activeView,
+  selectedAgent,
+  analysisComplete,
+  onViewChange,
+  onAgentClick,
+}: SidebarProps) {
   return (
     <aside
       className="hidden lg:flex flex-col"
@@ -76,19 +100,25 @@ export default function Sidebar() {
         <div className="section-label" style={{ padding: "0 8px 8px" }}>
           Navigation
         </div>
-        {navItems.map(({ label, icon: Icon, href }) => {
-          const active = pathname === href && label === "Dashboard";
+        {navItems.map(({ label, icon: Icon, view }) => {
+          const active = activeView === view;
+          const disabled = !analysisComplete && view !== "dashboard";
           return (
-            <a
+            <button
               key={label}
-              href={href}
+              onClick={() => !disabled && onViewChange(view)}
               className={`sidebar-item ${active ? "active" : ""}`}
-              style={{ marginBottom: 2 }}
+              style={{
+                marginBottom: 2,
+                opacity: disabled ? 0.45 : 1,
+                cursor: disabled ? "not-allowed" : "pointer",
+              }}
+              title={disabled ? "Analyze a company first" : undefined}
             >
               <Icon size={16} strokeWidth={active ? 2.5 : 2} />
               <span style={{ flex: 1 }}>{label}</span>
               {active && <ChevronRight size={14} style={{ opacity: 0.5 }} />}
-            </a>
+            </button>
           );
         })}
 
@@ -99,32 +129,77 @@ export default function Sidebar() {
         <div className="section-label" style={{ padding: "0 8px 10px" }}>
           AI Agents
         </div>
-        {agents.map(({ label, color }) => (
+        {!analysisComplete && (
           <div
-            key={label}
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "6px 8px",
-              borderRadius: 6,
-              marginBottom: 2,
+              padding: "8px 10px",
+              borderRadius: 8,
+              background: "var(--surface-2)",
+              border: "1px solid var(--border)",
+              marginBottom: 8,
             }}
           >
-            <div
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: color,
-                flexShrink: 0,
-              }}
-            />
-            <span style={{ fontSize: 12, color: "var(--text-3)", fontWeight: 500 }}>
-              {label}
-            </span>
+            <p style={{ fontSize: 11, color: "var(--text-4)", lineHeight: 1.4, textAlign: "center" }}>
+              Run an analysis to explore each agent's data &amp; reasoning
+            </p>
           </div>
-        ))}
+        )}
+        {agents.map(({ label, key, color, role }) => {
+          const isActive = selectedAgent === key && activeView === "agent-detail";
+          return (
+            <button
+              key={key}
+              onClick={() => analysisComplete && onAgentClick(key)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "7px 10px",
+                borderRadius: 8,
+                marginBottom: 2,
+                width: "100%",
+                border: isActive ? `1px solid ${color}33` : "1px solid transparent",
+                background: isActive ? `${color}12` : "transparent",
+                cursor: analysisComplete ? "pointer" : "not-allowed",
+                opacity: analysisComplete ? 1 : 0.45,
+                transition: "all 0.15s ease",
+                textAlign: "left",
+                fontFamily: "inherit",
+              }}
+              onMouseEnter={(e) => {
+                if (analysisComplete && !isActive) {
+                  (e.currentTarget as HTMLElement).style.background = "var(--surface-2)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  (e.currentTarget as HTMLElement).style.background = "transparent";
+                }
+              }}
+              title={!analysisComplete ? "Analyze a company first" : `View ${label} details`}
+            >
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: color,
+                  flexShrink: 0,
+                  boxShadow: isActive ? `0 0 6px ${color}88` : "none",
+                }}
+              />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 12, color: isActive ? "var(--text)" : "var(--text-3)", fontWeight: isActive ? 600 : 500, lineHeight: 1.2 }}>
+                  {label}
+                </div>
+                <div style={{ fontSize: 10, color: "var(--text-4)", lineHeight: 1 }}>
+                  {role}
+                </div>
+              </div>
+              {isActive && <ChevronRight size={12} style={{ color, flexShrink: 0 }} />}
+            </button>
+          );
+        })}
       </nav>
 
       {/* Footer */}
@@ -143,17 +218,17 @@ export default function Sidebar() {
             alignItems: "center",
             gap: 8,
             background: "var(--accent-light)",
-            border: "1px solid #C7D2FE",
+            border: "1px solid var(--border)",
             borderRadius: 8,
             padding: "10px 12px",
           }}
         >
-          <Sparkles size={14} color="var(--accent)" />
+          <Bot size={14} color="var(--accent)" />
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, color: "var(--accent-text)" }}>
-              Gemini 2.5 Flash
+              InvestIQ AI Engine
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-4)" }}>+ Groq fallback</div>
+            <div style={{ fontSize: 10, color: "var(--text-4)" }}>Multi-Agent Orchestration</div>
           </div>
         </div>
         <div style={{ fontSize: 11, color: "var(--text-4)", textAlign: "center" }}>

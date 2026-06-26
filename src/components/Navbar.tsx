@@ -77,7 +77,7 @@ export default function Navbar({ phase, companyName, onNewSearch, onAnalyze }: N
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
         {phase === "idle" && (
           <span style={{ fontSize: 13, color: "var(--text-4)", fontWeight: 500 }}>
-            Powered by Gemini 2.5 Flash · LangGraph Multi-Agent System
+            Autonomous Multi-Agent Investment Intelligence
           </span>
         )}
         {(phase === "analyzing" || phase === "done") && companyName && (

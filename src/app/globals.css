@@ -49,15 +49,15 @@
 }
 
 .dark {
-  /* Backgrounds */
-  --bg: #0F172A;
-  --surface: #1E293B;
-  --surface-2: #334155;
-  --surface-hover: #0F172A;
+  /* Backgrounds — true premium black */
+  --bg: #000000;
+  --surface: #0A0A0A;
+  --surface-2: #141414;
+  --surface-hover: #1A1A1A;
 
   /* Borders */
-  --border: #334155;
-  --border-strong: #475569;
+  --border: #222222;
+  --border-strong: #333333;
 
   /* Accents */
   --accent: #6366F1;
@@ -103,7 +103,7 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
