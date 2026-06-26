@@ -21,42 +21,66 @@
 
 ---
 
-## 📑 Table of Contents
-
-- 🎯 **[Overview — what it does](#overview--what-it-does)**
-  - [1 · Why InvestIQ AI Exists](#1-why-investiq-ai-exists) — *Problem statement, motivation, and why agentic AI was chosen*
-  - [13 · Security Architecture](#13-security-architecture) — *API key protection, validation, and server-side isolation*
-- ⚙️ **[How to run it — setup and run steps](#how-to-run-it--setup-and-run-steps)**
-  - [17 · Installation & Configuration](#17-installation-configuration) — *Step-by-step setup with every environment variable explained*
-- 🧠 **[How it works — approach and architecture](#how-it-works--approach-and-architecture)**
-  - [2 · High-Level System Architecture](#2-high-level-system-architecture) — *Full architecture diagram with every layer explained*
-  - [3 · Complete Project File Map](#3-complete-project-file-map) — *Every file in the repository, what it does, and why it exists*
-  - [5 · Multi-Agent Deep Dive](#5-multi-agent-deep-dive) — *Each of the 7 agents documented with APIs, prompts, inputs, outputs, token usage, and latency*
-  - [6 · End-to-End Request Lifecycle](#6-end-to-end-request-lifecycle) — *Full sequence diagram from user click to rendered dashboard*
-  - [7 · Agent Orchestration DAG](#7-agent-orchestration-dag) — *The LangGraph Directed Acyclic Graph with parallel branching*
-  - [8 · LLM Inference & Fallback Strategy](#8-llm-inference-fallback-strategy) — *Three-tier circuit breaker: Gemini → Groq → Mock*
-  - [9 · Data Flow Architecture](#9-data-flow-architecture) — *How data moves through every layer of the system*
-  - [10 · Prompt Engineering Strategy](#10-prompt-engineering-strategy) — *How system prompts are structured and why*
-  - [11 · Frontend Component Architecture](#11-frontend-component-architecture) — *Every UI component and its responsibility*
-  - [12 · SSE Streaming Protocol](#12-sse-streaming-protocol) — *How real-time agent updates reach the browser*
-- ⚖️ **[Key decisions & trade-offs](#key-decisions--trade-offs)**
-  - [4 · Technology Stack](#4-technology-stack) — *Every dependency with purpose, justification, and tradeoffs*
-  - [18 · Engineering Decisions & Tradeoffs](#18-engineering-decisions-tradeoffs) — *Why every major technical choice was made*
-- 📈 **[Example runs](#example-runs)**
-  - [16.5 · Example Runs](#165-example-runs) — *Example agent recommendation outputs on real-world test cases*
-  - [Interface Screenshots](#interface-screenshots) — *Visual layouts of the multi-agent system executing*
-- 🚀 **[What you would improve with more time](#what-you-would-improve-with-more-time)**
-  - [14 · Performance & Token Usage Analysis](#14-performance-token-usage-analysis) — *Per-agent latency, token costs, and overall pipeline metrics*
-  - [15 · Current Drawbacks & Limitations](#15-current-drawbacks-limitations) — *Honest, detailed analysis of every architectural gap*
-  - [16 · Future Modifications & Advanced Roadmap](#16-future-modifications-advanced-roadmap) — *Concrete engineering upgrades to make this production-ready*
-- 🎁 **[BONUS points: Chat transcript/logs](#bonus-points-chat-transcriptlogs)**
-  - [AI Chat Sessions Transcript/Logs](#ai-chat-sessions-transcriptlogs) — *Link and reference to the detailed AI chat transcripts (`ai_collaboration_logs.md`)*
-
 ---
 
 ## Overview — what it does
 
-### 1 · Why InvestIQ AI Exists
+---
+
+## 📑 Table of Contents
+
+### 🎯 **[1. Overview — What It Does](#1-overview--what-it-does)**
+- **[1.1 · Why InvestIQ AI Exists](#11-why-investiq-ai-exists)** — *Problem statement, motivation, and why agentic AI was chosen*
+- **[1.2 · Security Architecture](#12-security-architecture)** — *API key protection, validation, and server-side isolation*
+
+<br/>
+
+### ⚙️ **[2. How to Run It — Setup and Run Steps](#2-how-to-run-it--setup-and-run-steps)**
+- **[2.1 · Installation & Configuration](#21-installation--configuration)** — *Step-by-step setup with every environment variable explained*
+
+<br/>
+
+### 🧠 **[3. How It Works — Approach and Architecture](#3-how-it-works--approach-and-architecture)**
+- **[3.1 · High-Level System Architecture](#31-high-level-system-architecture)** — *Full architecture diagram with every layer explained*
+- **[3.2 · Complete Project File Map](#32-complete-project-file-map)** — *Every file in the repository, what it does, and why it exists*
+- **[3.3 · Multi-Agent Deep Dive](#33-multi-agent-deep-dive)** — *Each of the 7 agents documented with APIs, prompts, inputs, outputs, token usage, and latency*
+- **[3.4 · End-to-End Request Lifecycle](#34-end-to-end-request-lifecycle)** — *Full sequence diagram from user click to rendered dashboard*
+- **[3.5 · Agent Orchestration DAG](#35-agent-orchestration-dag)** — *The LangGraph Directed Acyclic Graph with parallel branching*
+- **[3.6 · LLM Inference & Fallback Strategy](#36-llm-inference--fallback-strategy)** — *Three-tier circuit breaker: Gemini → Groq → Mock*
+- **[3.7 · Data Flow Architecture](#37-data-flow-architecture)** — *How data moves through every layer of the system*
+- **[3.8 · Prompt Engineering Strategy](#38-prompt-engineering-strategy)** — *How system prompts are structured and why*
+- **[3.9 · Frontend Component Architecture](#39-frontend-component-architecture)** — *Every UI component and its responsibility*
+- **[3.10 · SSE Streaming Protocol](#310-sse-streaming-protocol)** — *How real-time agent updates reach the browser*
+
+<br/>
+
+### ⚖️ **[4. Key Decisions & Trade-offs](#4-key-decisions--trade-offs)**
+- **[4.1 · Technology Stack](#41-technology-stack)** — *Every dependency with purpose, justification, and tradeoffs*
+- **[4.2 · Engineering Decisions & Tradeoffs](#42-engineering-decisions--tradeoffs)** — *Why every major technical choice was made*
+
+<br/>
+
+### 📈 **[5. Example Runs](#5-example-runs)**
+- **[5.1 · Example Runs](#51-example-runs)** — *Example agent recommendation outputs on real-world test cases*
+- **[5.2 · Interface Screenshots](#52-interface-screenshots)** — *Visual layouts of the multi-agent system executing*
+
+<br/>
+
+### 🚀 **[6. What You Would Improve with More Time](#6-what-you-would-improve-with-more-time)**
+- **[6.1 · Performance & Token Usage Analysis](#61-performance--token-usage-analysis)** — *Per-agent latency, token costs, and overall pipeline metrics*
+- **[6.2 · Current Drawbacks & Limitations](#62-current-drawbacks--limitations)** — *Honest, detailed analysis of every architectural gap*
+- **[6.3 · Future Modifications & Advanced Roadmap](#63-future-modifications--advanced-roadmap)** — *Concrete engineering upgrades to make this production-ready*
+
+<br/>
+
+### 🎁 **[7. BONUS Points: Chat Transcript/Logs](#7-bonus-points-chat-transcriptlogs)**
+- **[7.1 · AI Chat Sessions Transcript/Logs](#71-ai-chat-sessions-transcriptlogs)** — *Link and reference to the detailed AI chat transcripts (`ai_collaboration_logs.md`)*
+
+---
+
+## 1. Overview — What It Does
+
+### 1.1 · Why InvestIQ AI Exists
 
 ### The Problem
 
@@ -86,7 +110,9 @@ InvestIQ AI uses **seven specialized AI agents**, each with a single well-define
 
 ---
 
-### 13 · Security Architecture
+---
+
+### 1.2 · Security Architecture
 
 | Concern | Implementation |
 |---------|---------------|
@@ -100,7 +126,11 @@ InvestIQ AI uses **seven specialized AI agents**, each with a single well-define
 
 ## How to run it — setup and run steps
 
-### 17 · Installation & Configuration
+---
+
+## 2. How to Run It — Setup and Run Steps
+
+### 2.1 · Installation & Configuration
 
 ### Prerequisites
 
@@ -145,7 +175,11 @@ Access the application at `http://localhost:3000`.
 
 ## How it works — approach and architecture
 
-### 2 · High-Level System Architecture
+---
+
+## 3. How It Works — Approach and Architecture
+
+### 3.1 · High-Level System Architecture
 
 ```mermaid
 graph TB
@@ -199,7 +233,9 @@ graph TB
 
 ---
 
-### 3 · Complete Project File Map
+---
+
+### 3.2 · Complete Project File Map
 
 Every file in this repository is documented below.
 
@@ -298,7 +334,9 @@ Every file in this repository is documented below.
 
 ---
 
-### 5 · Multi-Agent Deep Dive
+---
+
+### 3.3 · Multi-Agent Deep Dive
 
 ### Agent 1: Research Agent (`researchAgent.ts`)
 
@@ -411,7 +449,9 @@ Every file in this repository is documented below.
 
 ---
 
-### 6 · End-to-End Request Lifecycle
+---
+
+### 3.4 · End-to-End Request Lifecycle
 
 ```mermaid
 sequenceDiagram
@@ -497,7 +537,9 @@ sequenceDiagram
 
 ---
 
-### 7 · Agent Orchestration DAG
+---
+
+### 3.5 · Agent Orchestration DAG
 
 ```mermaid
 graph TD
@@ -536,7 +578,9 @@ graph TD
 
 ---
 
-### 8 · LLM Inference & Fallback Strategy
+---
+
+### 3.6 · LLM Inference & Fallback Strategy
 
 Every agent calls `askGeminiJSON<T>()` from `src/services/gemini.ts`. This function implements a **three-tier cascading circuit breaker**:
 
@@ -566,7 +610,9 @@ flowchart TD
 
 ---
 
-### 9 · Data Flow Architecture
+---
+
+### 3.7 · Data Flow Architecture
 
 ```mermaid
 flowchart LR
@@ -611,7 +657,9 @@ flowchart LR
 
 ---
 
-### 10 · Prompt Engineering Strategy
+---
+
+### 3.8 · Prompt Engineering Strategy
 
 Every agent uses a carefully crafted system instruction stored in `src/prompts/`. The prompting strategy follows these principles:
 
@@ -622,7 +670,9 @@ Every agent uses a carefully crafted system instruction stored in `src/prompts/`
 
 ---
 
-### 11 · Frontend Component Architecture
+---
+
+### 3.9 · Frontend Component Architecture
 
 ```mermaid
 graph TD
@@ -649,7 +699,9 @@ graph TD
 
 ---
 
-### 12 · SSE Streaming Protocol
+---
+
+### 3.10 · SSE Streaming Protocol
 
 The API route (`src/app/api/analyze/route.ts`) uses Server-Sent Events to push real-time updates. The event types are:
 
@@ -666,7 +718,11 @@ The API route (`src/app/api/analyze/route.ts`) uses Server-Sent Events to push r
 
 ## Key decisions & trade-offs
 
-### 4 · Technology Stack
+---
+
+## 4. Key Decisions & Trade-offs
+
+### 4.1 · Technology Stack
 
 | Category | Technology | Version | Purpose | Why This Over Alternatives |
 |----------|-----------|---------|---------|---------------------------|
@@ -691,7 +747,9 @@ The API route (`src/app/api/analyze/route.ts`) uses Server-Sent Events to push r
 
 ---
 
-### 18 · Engineering Decisions & Tradeoffs
+---
+
+### 4.2 · Engineering Decisions & Tradeoffs
 
 | Decision | Why This Choice | Alternative Considered | Tradeoff |
 |----------|----------------|----------------------|----------|
@@ -707,7 +765,11 @@ The API route (`src/app/api/analyze/route.ts`) uses Server-Sent Events to push r
 
 ## Example runs
 
-### 16.5 · Example Runs
+---
+
+## 5. Example Runs
+
+### 5.1 · Example Runs
 
 The Multi-Agent Decision system's outputs have been verified against multiple scenarios. Below are two representative examples of the agent's structured JSON outputs.
 
@@ -763,7 +825,9 @@ The Multi-Agent Decision system's outputs have been verified against multiple sc
 
 ---
 
-### Interface Screenshots
+---
+
+### 5.2 · Interface Screenshots
 
 Below are the visual layouts of the multi-agent system executing and delivering research reports, in sequential workflow order:
 
@@ -792,7 +856,11 @@ Below are the visual layouts of the multi-agent system executing and delivering 
 
 ## What you would improve with more time
 
-### 14 · Performance & Token Usage Analysis
+---
+
+## 6. What You Would Improve with More Time
+
+### 6.1 · Performance & Token Usage Analysis
 
 ### Per-Agent Metrics (Estimated)
 
@@ -821,7 +889,9 @@ Below are the visual layouts of the multi-agent system executing and delivering 
 
 ---
 
-### 15 · Current Drawbacks & Limitations
+---
+
+### 6.2 · Current Drawbacks & Limitations
 
 ### 15.1 No Persistent Memory or Storage
 
@@ -879,7 +949,9 @@ Below are the visual layouts of the multi-agent system executing and delivering 
 
 ---
 
-### 16 · Future Modifications & Advanced Roadmap
+---
+
+### 6.3 · Future Modifications & Advanced Roadmap
 
 ### Phase 1: Immediate (Next Sprint)
 
@@ -923,6 +995,20 @@ This log contains all the step-by-step interactions, design deliberations, code 
 
 ---
 
+---
+
+## 7. BONUS Points: Chat Transcript/Logs
+
+### 7.1 · AI Chat Sessions Transcript/Logs
+
+To see the complete process of building this application under AI guidance, refer to the detailed transcripts and logs document:
+
+👉 **[AI Collaboration Chat Logs & Transcripts](file:///c:/Users/B.PAVANKALYAN%20REDDY/Desktop/INVEST%20IQ/ai_collaboration_logs.md)**
+
+This log contains all the step-by-step interactions, design deliberations, code refactoring, API integration debugging, and deployment steps carried out by the agent and developer in collaborative synergy.
+
+---
+
 ## 📄 License
 
 This project is licensed under the **MIT License**.
@@ -936,4 +1022,5 @@ This project is licensed under the **MIT License**.
   **[⬆ Back to Top](#-investiq-ai)**
   
 </div>
+
 
