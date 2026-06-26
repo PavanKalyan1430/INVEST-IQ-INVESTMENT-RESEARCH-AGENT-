@@ -37,6 +37,11 @@
   --text-2: #334155;
   --text-3: #64748B;
   --text-4: #94A3B8;
+  --text-primary: var(--text);
+  --text-secondary: var(--text-2);
+  --text-muted: var(--text-3);
+  --bg-card: var(--surface);
+  --bg-border: var(--border);
 
   /* Misc */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -81,6 +86,11 @@
   --text-2: #E2E8F0;
   --text-3: #94A3B8;
   --text-4: #64748B;
+  --text-primary: var(--text);
+  --text-secondary: var(--text-2);
+  --text-muted: var(--text-3);
+  --bg-card: var(--surface);
+  --bg-border: var(--border);
 
   /* Misc */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
