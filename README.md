@@ -805,28 +805,28 @@ The Multi-Agent Decision system's outputs have been verified against multiple sc
 
 ### Interface Screenshots
 
-Here are the visual layouts of the multi-agent system executing and delivering research reports:
+Below are the visual layouts of the multi-agent system executing and delivering research reports, in sequential workflow order:
 
 #### 1. AI Mission Control Terminal (Live Progress)
-![AI Mission Control Terminal](./public/images/media__1782466268723.png)
+![AI Mission Control Terminal](./Example-runs/ss1.png)
 
 #### 2. Investment Analysis Dashboard (Summary & Recommendation)
-![Analysis Report Dashboard](./public/images/media__1782466265680.png)
+![Analysis Report Dashboard](./Example-runs/ss2.png)
 
 #### 3. Deep-Dive Analytics Tab
-![Deep-Dive Analytics](./public/images/media__1782466288408.png)
+![Deep-Dive Analytics](./Example-runs/ss3.png)
 
 #### 4. Market Trends Tab (Landscape & Positioning)
-![Market Trends](./public/images/media__1782466292331.png)
+![Market Trends](./Example-runs/ss4.png)
 
 #### 5. Swarm Intelligence Analytics & Interactive Performance Matrix
-![Swarm Intelligence & Matrix](./public/images/media__1782466296366.png)
+![Swarm Intelligence & Matrix](./Example-runs/ss5.png)
 
 #### 6. Bull vs Bear AI Debate & Rationale Synthesis
-![Bull vs Bear AI Debate](./public/images/media__1782466400334.png)
+![Bull vs Bear AI Debate](./Example-runs/ss6.png)
 
 #### 7. Sentiment and News Stream Analysis
-![News & Sentiment Analysis](./public/images/media__1782466438634.png)
+![News & Sentiment Analysis](./Example-runs/ss7.png)
 
 ---
 
