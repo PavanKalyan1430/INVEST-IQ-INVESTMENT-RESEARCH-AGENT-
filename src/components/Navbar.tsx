@@ -13,7 +13,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ phase, companyName, onNewSearch, onAnalyze }: NavbarProps) {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
     if (document.documentElement.classList.contains("dark")) {
