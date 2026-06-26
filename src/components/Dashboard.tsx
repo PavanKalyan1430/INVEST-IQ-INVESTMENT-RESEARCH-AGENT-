@@ -131,7 +131,7 @@ export default function Dashboard({ state, report, companyName, onReset }: Dashb
       </div>
 
       {/* Section 7: Market Analytics & Visualization */}
-      <MarketAnalytics companyName={companyName} />
+      <MarketAnalytics companyName={companyName} state={state} report={report} />
 
       {/* Section 8: Sources */}
       {report.sources && report.sources.length > 0 && (
