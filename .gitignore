@@ -43,3 +43,5 @@ next-env.d.ts
 # Prompts
 /STAGES PROMPT/
 project_prompt.md
+
+.vercel

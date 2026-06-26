@@ -18,33 +18,45 @@
 
 ---
 
-## 📑 Table of Contents
-
-| # | Section | Description |
-|---|---------|-------------|
-| 1 | [Why InvestIQ AI Exists](#1--why-investiq-ai-exists) | Problem statement, motivation, and why agentic AI was chosen |
-| 2 | [High-Level System Architecture](#2--high-level-system-architecture) | Full architecture diagram with every layer explained |
-| 3 | [Complete Project File Map](#3--complete-project-file-map) | Every file in the repository, what it does, and why it exists |
-| 4 | [Technology Stack](#4--technology-stack) | Every dependency with purpose, justification, and tradeoffs |
-| 5 | [Multi-Agent Deep Dive](#5--multi-agent-deep-dive) | Each of the 7 agents documented with APIs, prompts, inputs, outputs, token usage, and latency |
-| 6 | [End-to-End Request Lifecycle](#6--end-to-end-request-lifecycle) | Full sequence diagram from user click to rendered dashboard |
-| 7 | [Agent Orchestration DAG](#7--agent-orchestration-dag) | The LangGraph Directed Acyclic Graph with parallel branching |
-| 8 | [LLM Inference & Fallback Strategy](#8--llm-inference--fallback-strategy) | Three-tier circuit breaker: Gemini → Groq → Mock |
-| 9 | [Data Flow Architecture](#9--data-flow-architecture) | How data moves through every layer of the system |
-| 10 | [Prompt Engineering Strategy](#10--prompt-engineering-strategy) | How system prompts are structured and why |
-| 11 | [Frontend Component Architecture](#11--frontend-component-architecture) | Every UI component and its responsibility |
-| 12 | [SSE Streaming Protocol](#12--sse-streaming-protocol) | How real-time agent updates reach the browser |
-| 13 | [Security Architecture](#13--security-architecture) | API key protection, validation, and server-side isolation |
-| 14 | [Performance & Token Usage Analysis](#14--performance--token-usage-analysis) | Per-agent latency, token costs, and overall pipeline metrics |
-| 15 | [Current Drawbacks & Limitations](#15--current-drawbacks--limitations) | Honest, detailed analysis of every architectural gap |
-| 16 | [Future Modifications & Advanced Roadmap](#16--future-modifications--advanced-roadmap) | Concrete engineering upgrades to make this production-ready |
-| 16.5 | [Example Runs](#16.5--example-runs) | Example agent recommendation outputs on real-world test cases |
-| 17 | [Installation & Configuration](#17--installation--configuration) | Step-by-step setup with every environment variable explained |
-| 18 | [Engineering Decisions & Tradeoffs](#18--engineering-decisions--tradeoffs) | Why every major technical choice was made |
 
 ---
 
-## 1 · Why InvestIQ AI Exists
+## 📑 Table of Contents
+
+- 🎯 **[Overview — what it does](#overview--what-it-does)**
+  - [1 · Why InvestIQ AI Exists](#1-why-investiq-ai-exists) — *Problem statement, motivation, and why agentic AI was chosen*
+  - [13 · Security Architecture](#13-security-architecture) — *API key protection, validation, and server-side isolation*
+- ⚙️ **[How to run it — setup and run steps](#how-to-run-it--setup-and-run-steps)**
+  - [17 · Installation & Configuration](#17-installation-configuration) — *Step-by-step setup with every environment variable explained*
+- 🧠 **[How it works — approach and architecture](#how-it-works--approach-and-architecture)**
+  - [2 · High-Level System Architecture](#2-high-level-system-architecture) — *Full architecture diagram with every layer explained*
+  - [3 · Complete Project File Map](#3-complete-project-file-map) — *Every file in the repository, what it does, and why it exists*
+  - [5 · Multi-Agent Deep Dive](#5-multi-agent-deep-dive) — *Each of the 7 agents documented with APIs, prompts, inputs, outputs, token usage, and latency*
+  - [6 · End-to-End Request Lifecycle](#6-end-to-end-request-lifecycle) — *Full sequence diagram from user click to rendered dashboard*
+  - [7 · Agent Orchestration DAG](#7-agent-orchestration-dag) — *The LangGraph Directed Acyclic Graph with parallel branching*
+  - [8 · LLM Inference & Fallback Strategy](#8-llm-inference-fallback-strategy) — *Three-tier circuit breaker: Gemini → Groq → Mock*
+  - [9 · Data Flow Architecture](#9-data-flow-architecture) — *How data moves through every layer of the system*
+  - [10 · Prompt Engineering Strategy](#10-prompt-engineering-strategy) — *How system prompts are structured and why*
+  - [11 · Frontend Component Architecture](#11-frontend-component-architecture) — *Every UI component and its responsibility*
+  - [12 · SSE Streaming Protocol](#12-sse-streaming-protocol) — *How real-time agent updates reach the browser*
+- ⚖️ **[Key decisions & trade-offs](#key-decisions--trade-offs)**
+  - [4 · Technology Stack](#4-technology-stack) — *Every dependency with purpose, justification, and tradeoffs*
+  - [18 · Engineering Decisions & Tradeoffs](#18-engineering-decisions-tradeoffs) — *Why every major technical choice was made*
+- 📈 **[Example runs](#example-runs)**
+  - [16.5 · Example Runs](#165-example-runs) — *Example agent recommendation outputs on real-world test cases*
+  - [Interface Screenshots](#interface-screenshots) — *Visual layouts of the multi-agent system executing*
+- 🚀 **[What you would improve with more time](#what-you-would-improve-with-more-time)**
+  - [14 · Performance & Token Usage Analysis](#14-performance-token-usage-analysis) — *Per-agent latency, token costs, and overall pipeline metrics*
+  - [15 · Current Drawbacks & Limitations](#15-current-drawbacks-limitations) — *Honest, detailed analysis of every architectural gap*
+  - [16 · Future Modifications & Advanced Roadmap](#16-future-modifications-advanced-roadmap) — *Concrete engineering upgrades to make this production-ready*
+- 🎁 **[BONUS points: Chat transcript/logs](#bonus-points-chat-transcriptlogs)**
+  - [AI Chat Sessions Transcript/Logs](#ai-chat-sessions-transcriptlogs) — *Link and reference to the detailed AI chat transcripts (`ai_collaboration_logs.md`)*
+
+---
+
+## Overview — what it does
+
+### 1 · Why InvestIQ AI Exists
 
 ### The Problem
 
@@ -74,7 +86,66 @@ InvestIQ AI uses **seven specialized AI agents**, each with a single well-define
 
 ---
 
-## 2 · High-Level System Architecture
+### 13 · Security Architecture
+
+| Concern | Implementation |
+|---------|---------------|
+| **API Key Isolation** | All 6 API keys are stored in `.env.local` (gitignored). They are only accessed server-side via `src/config/env.ts`. Next.js API routes execute on the server, so keys are never exposed to the browser. |
+| **Input Validation** | The API route validates that `companyName` is a non-empty string before invoking the workflow. |
+| **CORS** | Next.js handles CORS automatically for same-origin API routes. |
+| **Mock Mode Detection** | `env.ts` exposes an `IS_MOCK` boolean. When no API keys are configured, the system gracefully degrades to deterministic mock data instead of crashing. |
+| **No Authentication** | Currently there is no user authentication system. This is a documented limitation (see Section 15). |
+
+---
+
+## How to run it — setup and run steps
+
+### 17 · Installation & Configuration
+
+### Prerequisites
+
+- Node.js v20 or higher
+- npm or pnpm package manager
+- API keys (at minimum, `GEMINI_API_KEY` for full functionality; the system runs in mock mode without any keys)
+
+### Setup
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/PavanKalyan1430/INVEST-IQ-INVESTMENT-RESEARCH-AGENT-.git
+cd INVEST-IQ-INVESTMENT-RESEARCH-AGENT-
+
+# 2. Install dependencies
+npm install
+
+# 3. Create environment file
+cp .env.example .env.local
+# Edit .env.local with your API keys
+
+# 4. Start development server (frontend + backend)
+npm run dev
+```
+
+Access the application at `http://localhost:3000`.
+
+### Environment Variables
+
+| Variable | Required | Provider | Free Tier | Purpose |
+|----------|----------|----------|-----------|---------|
+| `GEMINI_API_KEY` | Recommended | [Google AI Studio](https://aistudio.google.com/) | 15 RPM, 1M TPM | Primary LLM inference for all 7 agents |
+| `GROQ_API_KEY` | Optional | [Groq Console](https://console.groq.com/) | 30 RPM | Fallback LLM (Level 2 circuit breaker) |
+| `TAVILY_API_KEY` | Optional | [Tavily](https://tavily.com/) | 1,000 req/month | Web search grounding for Research Agent |
+| `FINNHUB_API_KEY` | Optional | [Finnhub](https://finnhub.io/) | 60 req/min | Company profile data (name, industry, market cap) |
+| `FMP_API_KEY` | Optional | [FMP](https://financialmodelingprep.com/) | 250 req/day | Income statements, PE ratio, ROE, EPS, cash flow |
+| `NEWS_API_KEY` | Optional | [NewsData.io](https://newsdata.io/) | 200 req/day | Real-time global news articles |
+
+> **Note:** The system is designed to run even with **zero API keys configured**. Every service has a deterministic mock fallback that produces realistic data, allowing development and demos without any external dependencies.
+
+---
+
+## How it works — approach and architecture
+
+### 2 · High-Level System Architecture
 
 ```mermaid
 graph TB
@@ -128,7 +199,7 @@ graph TB
 
 ---
 
-## 3 · Complete Project File Map
+### 3 · Complete Project File Map
 
 Every file in this repository is documented below.
 
@@ -227,32 +298,7 @@ Every file in this repository is documented below.
 
 ---
 
-## 4 · Technology Stack
-
-| Category | Technology | Version | Purpose | Why This Over Alternatives |
-|----------|-----------|---------|---------|---------------------------|
-| **Runtime** | Node.js | 20+ | Server-side JavaScript execution | Required for Next.js App Router |
-| **Framework** | Next.js | 14+ | Full-stack React framework with API routes | Unified frontend + backend in one deployment. Eliminates need for separate Express server. |
-| **UI Library** | React | 19.2 | Component-based UI rendering | Industry standard, massive ecosystem |
-| **Language** | TypeScript | 5.x | Static typing for all agents and state | Catches state shape mismatches at compile time, critical for multi-agent coordination |
-| **Orchestration** | LangGraph | 1.4.6 | Multi-agent DAG orchestration with state management | Superior to LangChain sequential chains (supports parallel branching, state reducers, and cyclic graphs). Superior to AutoGen (deterministic, no infinite loops). |
-| **Primary LLM** | Google Gemini 2.5 Flash | Latest | High-speed structured JSON inference | Native `responseMimeType: 'application/json'` enforcement. 1M token context window. ~$0.075/M input tokens. |
-| **Fallback LLM** | LLaMA 3.3 70B (via Groq) | Latest | Circuit breaker fallback inference | Groq's LPU delivers ~500 tokens/sec. OpenAI-compatible API makes it a drop-in replacement. |
-| **Search** | Tavily | v1 | LLM-optimized web search for grounding | Purpose-built for AI agents (returns clean text, not HTML). 3 retry attempts built in. |
-| **Market Data** | Finnhub | v1 | Company profiles, market cap, industry classification | Free tier with 60 req/min. Real-time data. |
-| **Financials** | Financial Modeling Prep | v3 | Income statements, PE ratios, ROE, EPS, cash flows | Structured JSON API for 3 years of historical financials. |
-| **News** | NewsData.io | v1 | Real-time global news aggregation | Covers 30,000+ sources. Language-filtered queries. |
-| **HTTP Client** | Axios | 1.18 | External API calls with error handling | More robust than fetch for retry/timeout patterns |
-| **Charts** | Recharts | 3.9 | SVG-based data visualizations (Radar, Bar, Pie) | Lightweight, React-native, responsive |
-| **Animation** | Framer Motion | 12.x | UI micro-animations and transitions | Declarative animation API for React |
-| **Icons** | Lucide React | 1.21 | Consistent icon system across UI | Tree-shakeable, lightweight SVG icons |
-| **Validation** | Zod | 4.4 | Schema validation for API inputs | TypeScript-first validation library |
-| **Styling** | Tailwind CSS | 4.x | Utility-first CSS framework | Rapid prototyping with design token support |
-| **CSS Variables** | Custom Properties | — | Theme system (light/dark mode) | All colors defined as CSS variables, toggled by `.dark` class |
-
----
-
-## 5 · Multi-Agent Deep Dive
+### 5 · Multi-Agent Deep Dive
 
 ### Agent 1: Research Agent (`researchAgent.ts`)
 
@@ -365,7 +411,7 @@ Every file in this repository is documented below.
 
 ---
 
-## 6 · End-to-End Request Lifecycle
+### 6 · End-to-End Request Lifecycle
 
 ```mermaid
 sequenceDiagram
@@ -451,7 +497,7 @@ sequenceDiagram
 
 ---
 
-## 7 · Agent Orchestration DAG
+### 7 · Agent Orchestration DAG
 
 ```mermaid
 graph TD
@@ -490,7 +536,7 @@ graph TD
 
 ---
 
-## 8 · LLM Inference & Fallback Strategy
+### 8 · LLM Inference & Fallback Strategy
 
 Every agent calls `askGeminiJSON<T>()` from `src/services/gemini.ts`. This function implements a **three-tier cascading circuit breaker**:
 
@@ -520,7 +566,7 @@ flowchart TD
 
 ---
 
-## 9 · Data Flow Architecture
+### 9 · Data Flow Architecture
 
 ```mermaid
 flowchart LR
@@ -565,7 +611,7 @@ flowchart LR
 
 ---
 
-## 10 · Prompt Engineering Strategy
+### 10 · Prompt Engineering Strategy
 
 Every agent uses a carefully crafted system instruction stored in `src/prompts/`. The prompting strategy follows these principles:
 
@@ -576,7 +622,7 @@ Every agent uses a carefully crafted system instruction stored in `src/prompts/`
 
 ---
 
-## 11 · Frontend Component Architecture
+### 11 · Frontend Component Architecture
 
 ```mermaid
 graph TD
@@ -603,7 +649,7 @@ graph TD
 
 ---
 
-## 12 · SSE Streaming Protocol
+### 12 · SSE Streaming Protocol
 
 The API route (`src/app/api/analyze/route.ts`) uses Server-Sent Events to push real-time updates. The event types are:
 
@@ -618,136 +664,50 @@ The API route (`src/app/api/analyze/route.ts`) uses Server-Sent Events to push r
 
 ---
 
-## 13 · Security Architecture
+## Key decisions & trade-offs
 
-| Concern | Implementation |
-|---------|---------------|
-| **API Key Isolation** | All 6 API keys are stored in `.env.local` (gitignored). They are only accessed server-side via `src/config/env.ts`. Next.js API routes execute on the server, so keys are never exposed to the browser. |
-| **Input Validation** | The API route validates that `companyName` is a non-empty string before invoking the workflow. |
-| **CORS** | Next.js handles CORS automatically for same-origin API routes. |
-| **Mock Mode Detection** | `env.ts` exposes an `IS_MOCK` boolean. When no API keys are configured, the system gracefully degrades to deterministic mock data instead of crashing. |
-| **No Authentication** | Currently there is no user authentication system. This is a documented limitation (see Section 15). |
+### 4 · Technology Stack
 
----
-
-## 14 · Performance & Token Usage Analysis
-
-### Per-Agent Metrics (Estimated)
-
-| Agent | External API Calls | API Latency | LLM Input Tokens | LLM Output Tokens | LLM Latency | Total Latency |
-|-------|-------------------|-------------|-------------------|--------------------|-------------|---------------|
-| Research | 2 (Tavily + Finnhub) | 1-2s | ~1,200 | ~400 | 1-2s | **2-4s** |
-| Financial | 2 (FMP Income + Metrics) | 0.5-1s | ~1,000 | ~350 | 1-2s | **2-3s** |
-| News | 1 (NewsData.io) | 1-2s | ~1,500 | ~500 | 1-2s | **2-4s** |
-| Sentiment | 0 (uses prior state) | 0s | ~600 | ~100 | 1-2s | **1-2s** |
-| Risk | 0 (uses prior state) | 0s | ~800 | ~400 | 1-3s | **1-3s** |
-| Decision | 0 (uses prior state) | 0s | ~1,000 | ~350 | 1-3s | **1-3s** |
-| Report | 0 (uses prior state) | 0s | ~2,000 | ~600 | 2-4s | **2-4s** |
-
-### Pipeline Totals
-
-| Metric | Value |
-|--------|-------|
-| **Total LLM Calls** | 7 (one per agent) |
-| **Total Input Tokens** | ~8,100 per run |
-| **Total Output Tokens** | ~2,700 per run |
-| **Estimated Cost (Gemini)** | ~$0.002 per full analysis |
-| **Estimated Cost (Groq fallback)** | ~$0.006 per full analysis |
-| **Sequential Path Latency** | 12-25 seconds |
-| **With Parallel Optimization** | 8-18 seconds (Financial/News/Sentiment run concurrently) |
-| **External API Calls** | 5 total (Tavily, Finnhub, FMP×2, NewsData) |
+| Category | Technology | Version | Purpose | Why This Over Alternatives |
+|----------|-----------|---------|---------|---------------------------|
+| **Runtime** | Node.js | 20+ | Server-side JavaScript execution | Required for Next.js App Router |
+| **Framework** | Next.js | 14+ | Full-stack React framework with API routes | Unified frontend + backend in one deployment. Eliminates need for separate Express server. |
+| **UI Library** | React | 19.2 | Component-based UI rendering | Industry standard, massive ecosystem |
+| **Language** | TypeScript | 5.x | Static typing for all agents and state | Catches state shape mismatches at compile time, critical for multi-agent coordination |
+| **Orchestration** | LangGraph | 1.4.6 | Multi-agent DAG orchestration with state management | Superior to LangChain sequential chains (supports parallel branching, state reducers, and cyclic graphs). Superior to AutoGen (deterministic, no infinite loops). |
+| **Primary LLM** | Google Gemini 2.5 Flash | Latest | High-speed structured JSON inference | Native `responseMimeType: 'application/json'` enforcement. 1M token context window. ~$0.075/M input tokens. |
+| **Fallback LLM** | LLaMA 3.3 70B (via Groq) | Latest | Circuit breaker fallback inference | Groq's LPU delivers ~500 tokens/sec. OpenAI-compatible API makes it a drop-in replacement. |
+| **Search** | Tavily | v1 | LLM-optimized web search for grounding | Purpose-built for AI agents (returns clean text, not HTML). 3 retry attempts built in. |
+| **Market Data** | Finnhub | v1 | Company profiles, market cap, industry classification | Free tier with 60 req/min. Real-time data. |
+| **Financials** | Financial Modeling Prep | v3 | Income statements, PE ratios, ROE, EPS, cash flows | Structured JSON API for 3 years of historical financials. |
+| **News** | NewsData.io | v1 | Real-time global news aggregation | Covers 30,000+ sources. Language-filtered queries. |
+| **HTTP Client** | Axios | 1.18 | External API calls with error handling | More robust than fetch for retry/timeout patterns |
+| **Charts** | Recharts | 3.9 | SVG-based data visualizations (Radar, Bar, Pie) | Lightweight, React-native, responsive |
+| **Animation** | Framer Motion | 12.x | UI micro-animations and transitions | Declarative animation API for React |
+| **Icons** | Lucide React | 1.21 | Consistent icon system across UI | Tree-shakeable, lightweight SVG icons |
+| **Validation** | Zod | 4.4 | Schema validation for API inputs | TypeScript-first validation library |
+| **Styling** | Tailwind CSS | 4.x | Utility-first CSS framework | Rapid prototyping with design token support |
+| **CSS Variables** | Custom Properties | — | Theme system (light/dark mode) | All colors defined as CSS variables, toggled by `.dark` class |
 
 ---
 
-## 15 · Current Drawbacks & Limitations
+### 18 · Engineering Decisions & Tradeoffs
 
-### 15.1 No Persistent Memory or Storage
-
-**Problem:** The entire `GraphState` lives in-memory during the HTTP request lifecycle. Once the response is sent, the state is garbage collected. If the user refreshes the browser, the entire analysis is lost.
-
-**Impact:** Users cannot revisit past analyses. No historical data exists for backtesting agent accuracy.
-
-**Root Cause:** LangGraph's `StateGraph` is compiled without a `checkpointer`. Adding PostgreSQL persistence via `@langchain/langgraph-checkpoint-postgres` would solve this.
-
-### 15.2 Synchronous Bottleneck at Risk Agent
-
-**Problem:** The Risk Agent is a **join node** that must wait for the slowest of three parallel agents (Financial, News, Sentiment) before executing. If NewsData.io has a 5-second timeout, the entire pipeline stalls at this point.
-
-**Impact:** A single slow API can inflate end-to-end latency from 12s to 30s+.
-
-**Mitigation:** Implementing per-agent timeouts with `Promise.race()` and falling back to mock data after 5 seconds would prevent cascading delays.
-
-### 15.3 No Semantic Caching
-
-**Problem:** If 10 users search for "TSLA" within 5 minutes, the system runs the full 7-agent pipeline 10 times, making 50+ external API calls and 70 LLM inferences.
-
-**Impact:** Unnecessary token expenditure (~$0.02 wasted) and redundant API load.
-
-**Solution:** A Redis-based semantic cache keyed on `companyName + timestamp_bucket` would return cached `GraphState` for duplicate queries within a configurable TTL.
-
-### 15.4 No User Authentication or Multi-Tenancy
-
-**Problem:** The application has no login, no user sessions, and no rate limiting. Anyone with the URL can trigger unlimited analysis runs.
-
-**Impact:** Vulnerable to API key exhaustion attacks. No way to track per-user usage.
-
-### 15.5 No Observability or Tracing
-
-**Problem:** Agent execution is logged to `console.log` only. There is no structured logging, no distributed tracing (e.g., LangSmith, OpenTelemetry), and no performance monitoring dashboard.
-
-**Impact:** Debugging production failures requires reading raw server logs. No way to measure agent accuracy over time.
-
-### 15.6 No RAG (Retrieval-Augmented Generation)
-
-**Problem:** Financial analysis relies on FMP API summaries rather than raw SEC 10-K filings. The system cannot process uploaded PDFs or proprietary documents.
-
-**Impact:** Misses qualitative risk factors buried deep in 10-K footnotes (e.g., pending lawsuits, off-balance-sheet liabilities).
-
-### 15.7 No Agent Self-Evaluation or Reflection
-
-**Problem:** Agents do not evaluate the quality of their own outputs. If the Sentiment Agent returns `{ positivePercent: 200 }`, the system blindly passes this to downstream agents.
-
-**Impact:** A single hallucinated output can cascade through Risk → Decision → Report.
-
-### 15.8 No Fine-Tuned Models
-
-**Problem:** All agents use the same general-purpose Gemini 2.5 Flash model. No domain-specific fine-tuning has been applied.
-
-**Impact:** Financial terminology and nuanced risk classification may be less accurate than a fine-tuned financial model.
+| Decision | Why This Choice | Alternative Considered | Tradeoff |
+|----------|----------------|----------------------|----------|
+| **Next.js over Express + React** | Single deployment artifact. API routes and frontend share the same codebase, types, and deployment. | Express.js backend + Vite frontend | Tighter coupling, but eliminates CORS issues, simplifies deployment, and shares TypeScript interfaces. |
+| **LangGraph over LangChain Chains** | LangChain sequential chains cannot model parallel fan-out/fan-in patterns. LangGraph supports DAGs with state reducers. | LangChain `SequentialChain` | LangGraph has a steeper learning curve but enables the parallel Research → (Financial \|\| News \|\| Sentiment) pattern that cuts latency by 40%. |
+| **LangGraph over AutoGen/CrewAI** | AutoGen agents can enter infinite conversational loops. CrewAI lacks fine-grained state management. LangGraph's deterministic state machine ensures every run follows the exact same execution path. | AutoGen, CrewAI | Less flexible for open-ended research tasks, but perfect for structured financial analysis where consistency is critical. |
+| **SSE over WebSockets** | SSE is simpler to implement, works over HTTP/1.1, and is sufficient for server-to-client push (we don't need bidirectional communication yet). | WebSockets (Socket.io) | Cannot send client messages mid-stream. Documented as a future upgrade path. |
+| **Gemini 2.5 Flash over GPT-4o** | Native JSON mode (`responseMimeType`), 1M token context, ~10x cheaper than GPT-4o. | GPT-4o, Claude 3.5 Sonnet | Slightly lower reasoning quality on edge cases, but the cost and speed advantages are critical for a 7-agent pipeline. |
+| **CSS Variables over Tailwind Dark Mode** | CSS custom properties allow runtime theme switching without a build step. The `.dark` class simply overrides all `--var` values. | Tailwind `dark:` variant | Requires manual variable management, but gives us complete control over the dark mode palette without Tailwind class bloat. |
+| **Mock Fallbacks over Hard Failures** | Every external service has a hardcoded mock response. This ensures the UI never shows a blank screen, even during API outages. | Throw errors and show error screens | Users may not realize they're seeing mock data. Mitigated by logging warnings to the server console. |
 
 ---
 
-## 16 · Future Modifications & Advanced Roadmap
+## Example runs
 
-### Phase 1: Immediate (Next Sprint)
-
-| Feature | Implementation |
-|---------|---------------|
-| **Semantic Cache (Redis)** | Add Redis Stack. Before triggering the workflow, hash `companyName` + 2-hour time bucket. If cache hit, return stored `GraphState` instantly (~50ms vs 15s). |
-| **Per-Agent Timeouts** | Wrap each agent's API call in `Promise.race([agentFn(), timeout(5000)])`. On timeout, fall back to mock data for that agent only, allowing the pipeline to continue. |
-| **LangSmith Integration** | Add `LANGCHAIN_TRACING_V2=true` and `LANGCHAIN_API_KEY` to enable full agent execution tracing, latency profiling, and token usage dashboards. |
-
-### Phase 2: Next Version (v2.0)
-
-| Feature | Implementation |
-|---------|---------------|
-| **Persistent Graph Storage** | Integrate `@langchain/langgraph-checkpoint-postgres` with a PostgreSQL database via Prisma ORM. Every `GraphState` is persisted with timestamps, enabling historical report retrieval. |
-| **Human-in-the-Loop** | Add an `interrupt_before` configuration on the `decisionAgent` node. The graph pauses, sends the current state to the UI, and waits for a human portfolio manager to approve or override the recommendation before generating the report. |
-| **User Auth (NextAuth.js)** | Add Google OAuth + email/password authentication. Track per-user analysis history and enforce rate limits (e.g., 10 analyses/day on free tier). |
-| **RAG Pipeline** | Integrate Pinecone or Chroma as a vector database. Allow users to upload 10-K PDFs. Chunk, embed (Gemini Embedding), and store. The Financial Agent then performs similarity search before reasoning. |
-
-### Phase 3: Long-Term Vision (v3.0)
-
-| Feature | Implementation |
-|---------|---------------|
-| **Multi-Modal Analysis** | Upgrade Research Agent to accept image inputs (earnings charts, technical analysis screenshots). Use Gemini 1.5 Pro's vision capabilities to extract data from visual sources. |
-| **Agent Self-Reflection** | Add a `ReflectionAgent` node after the Decision Agent. This agent reviews the decision's reasoning, checks for logical inconsistencies, and can trigger a re-execution of upstream agents if confidence is below threshold. |
-| **Distributed Agent Execution** | Deploy each agent as an independent serverless function (AWS Lambda / Cloudflare Workers). Use message queues (SQS/Kafka) for inter-agent communication. Enables horizontal scaling. |
-| **Prediction Backtesting** | Store past recommendations with timestamps. After 30/60/90 days, compare predicted direction against actual stock price movement. Generate accuracy metrics per agent. |
-| **Cost-Aware Model Routing** | Route simple queries (e.g., well-known large-cap companies) to cheaper/faster models (Gemini Flash), and complex queries (small-cap, limited data) to more capable models (GPT-4o, Claude Opus). |
-| **WebSocket Streaming** | Replace SSE with bidirectional WebSockets (Socket.io) to allow users to send live corrections to agents mid-execution. |
-
-## 16.5 · Example Runs
+### 16.5 · Example Runs
 
 The Multi-Agent Decision system's outputs have been verified against multiple scenarios. Below are two representative examples of the agent's structured JSON outputs.
 
@@ -830,60 +790,136 @@ Below are the visual layouts of the multi-agent system executing and delivering 
 
 ---
 
-## 17 · Installation & Configuration
+## What you would improve with more time
 
-### Prerequisites
+### 14 · Performance & Token Usage Analysis
 
-- Node.js v20 or higher
-- npm or pnpm package manager
-- API keys (at minimum, `GEMINI_API_KEY` for full functionality; the system runs in mock mode without any keys)
+### Per-Agent Metrics (Estimated)
 
-### Setup
+| Agent | External API Calls | API Latency | LLM Input Tokens | LLM Output Tokens | LLM Latency | Total Latency |
+|-------|-------------------|-------------|-------------------|--------------------|-------------|---------------|
+| Research | 2 (Tavily + Finnhub) | 1-2s | ~1,200 | ~400 | 1-2s | **2-4s** |
+| Financial | 2 (FMP Income + Metrics) | 0.5-1s | ~1,000 | ~350 | 1-2s | **2-3s** |
+| News | 1 (NewsData.io) | 1-2s | ~1,500 | ~500 | 1-2s | **2-4s** |
+| Sentiment | 0 (uses prior state) | 0s | ~600 | ~100 | 1-2s | **1-2s** |
+| Risk | 0 (uses prior state) | 0s | ~800 | ~400 | 1-3s | **1-3s** |
+| Decision | 0 (uses prior state) | 0s | ~1,000 | ~350 | 1-3s | **1-3s** |
+| Report | 0 (uses prior state) | 0s | ~2,000 | ~600 | 2-4s | **2-4s** |
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/PavanKalyan1430/INVEST-IQ-INVESTMENT-RESEARCH-AGENT-.git
-cd INVEST-IQ-INVESTMENT-RESEARCH-AGENT-
+### Pipeline Totals
 
-# 2. Install dependencies
-npm install
-
-# 3. Create environment file
-cp .env.example .env.local
-# Edit .env.local with your API keys
-
-# 4. Start development server (frontend + backend)
-npm run dev
-```
-
-Access the application at `http://localhost:3000`.
-
-### Environment Variables
-
-| Variable | Required | Provider | Free Tier | Purpose |
-|----------|----------|----------|-----------|---------|
-| `GEMINI_API_KEY` | Recommended | [Google AI Studio](https://aistudio.google.com/) | 15 RPM, 1M TPM | Primary LLM inference for all 7 agents |
-| `GROQ_API_KEY` | Optional | [Groq Console](https://console.groq.com/) | 30 RPM | Fallback LLM (Level 2 circuit breaker) |
-| `TAVILY_API_KEY` | Optional | [Tavily](https://tavily.com/) | 1,000 req/month | Web search grounding for Research Agent |
-| `FINNHUB_API_KEY` | Optional | [Finnhub](https://finnhub.io/) | 60 req/min | Company profile data (name, industry, market cap) |
-| `FMP_API_KEY` | Optional | [FMP](https://financialmodelingprep.com/) | 250 req/day | Income statements, PE ratio, ROE, EPS, cash flow |
-| `NEWS_API_KEY` | Optional | [NewsData.io](https://newsdata.io/) | 200 req/day | Real-time global news articles |
-
-> **Note:** The system is designed to run even with **zero API keys configured**. Every service has a deterministic mock fallback that produces realistic data, allowing development and demos without any external dependencies.
+| Metric | Value |
+|--------|-------|
+| **Total LLM Calls** | 7 (one per agent) |
+| **Total Input Tokens** | ~8,100 per run |
+| **Total Output Tokens** | ~2,700 per run |
+| **Estimated Cost (Gemini)** | ~$0.002 per full analysis |
+| **Estimated Cost (Groq fallback)** | ~$0.006 per full analysis |
+| **Sequential Path Latency** | 12-25 seconds |
+| **With Parallel Optimization** | 8-18 seconds (Financial/News/Sentiment run concurrently) |
+| **External API Calls** | 5 total (Tavily, Finnhub, FMP×2, NewsData) |
 
 ---
 
-## 18 · Engineering Decisions & Tradeoffs
+### 15 · Current Drawbacks & Limitations
 
-| Decision | Why This Choice | Alternative Considered | Tradeoff |
-|----------|----------------|----------------------|----------|
-| **Next.js over Express + React** | Single deployment artifact. API routes and frontend share the same codebase, types, and deployment. | Express.js backend + Vite frontend | Tighter coupling, but eliminates CORS issues, simplifies deployment, and shares TypeScript interfaces. |
-| **LangGraph over LangChain Chains** | LangChain sequential chains cannot model parallel fan-out/fan-in patterns. LangGraph supports DAGs with state reducers. | LangChain `SequentialChain` | LangGraph has a steeper learning curve but enables the parallel Research → (Financial \|\| News \|\| Sentiment) pattern that cuts latency by 40%. |
-| **LangGraph over AutoGen/CrewAI** | AutoGen agents can enter infinite conversational loops. CrewAI lacks fine-grained state management. LangGraph's deterministic state machine ensures every run follows the exact same execution path. | AutoGen, CrewAI | Less flexible for open-ended research tasks, but perfect for structured financial analysis where consistency is critical. |
-| **SSE over WebSockets** | SSE is simpler to implement, works over HTTP/1.1, and is sufficient for server-to-client push (we don't need bidirectional communication yet). | WebSockets (Socket.io) | Cannot send client messages mid-stream. Documented as a future upgrade path. |
-| **Gemini 2.5 Flash over GPT-4o** | Native JSON mode (`responseMimeType`), 1M token context, ~10x cheaper than GPT-4o. | GPT-4o, Claude 3.5 Sonnet | Slightly lower reasoning quality on edge cases, but the cost and speed advantages are critical for a 7-agent pipeline. |
-| **CSS Variables over Tailwind Dark Mode** | CSS custom properties allow runtime theme switching without a build step. The `.dark` class simply overrides all `--var` values. | Tailwind `dark:` variant | Requires manual variable management, but gives us complete control over the dark mode palette without Tailwind class bloat. |
-| **Mock Fallbacks over Hard Failures** | Every external service has a hardcoded mock response. This ensures the UI never shows a blank screen, even during API outages. | Throw errors and show error screens | Users may not realize they're seeing mock data. Mitigated by logging warnings to the server console. |
+### 15.1 No Persistent Memory or Storage
+
+**Problem:** The entire `GraphState` lives in-memory during the HTTP request lifecycle. Once the response is sent, the state is garbage collected. If the user refreshes the browser, the entire analysis is lost.
+
+**Impact:** Users cannot revisit past analyses. No historical data exists for backtesting agent accuracy.
+
+**Root Cause:** LangGraph's `StateGraph` is compiled without a `checkpointer`. Adding PostgreSQL persistence via `@langchain/langgraph-checkpoint-postgres` would solve this.
+
+### 15.2 Synchronous Bottleneck at Risk Agent
+
+**Problem:** The Risk Agent is a **join node** that must wait for the slowest of three parallel agents (Financial, News, Sentiment) before executing. If NewsData.io has a 5-second timeout, the entire pipeline stalls at this point.
+
+**Impact:** A single slow API can inflate end-to-end latency from 12s to 30s+.
+
+**Mitigation:** Implementing per-agent timeouts with `Promise.race()` and falling back to mock data after 5 seconds would prevent cascading delays.
+
+### 15.3 No Semantic Caching
+
+**Problem:** If 10 users search for "TSLA" within 5 minutes, the system runs the full 7-agent pipeline 10 times, making 50+ external API calls and 70 LLM inferences.
+
+**Impact:** Unnecessary token expenditure (~$0.02 wasted) and redundant API load.
+
+**Solution:** A Redis-based semantic cache keyed on `companyName + timestamp_bucket` would return cached `GraphState` for duplicate queries within a configurable TTL.
+
+### 15.4 No User Authentication or Multi-Tenancy
+
+**Problem:** The application has no login, no user sessions, and no rate limiting. Anyone with the URL can trigger unlimited analysis runs.
+
+**Impact:** Vulnerable to API key exhaustion attacks. No way to track per-user usage.
+
+### 15.5 No Observability or Tracing
+
+**Problem:** Agent execution is logged to `console.log` only. There is no structured logging, no distributed tracing (e.g., LangSmith, OpenTelemetry), and no performance monitoring dashboard.
+
+**Impact:** Debugging production failures requires reading raw server logs. No way to measure agent accuracy over time.
+
+### 15.6 No RAG (Retrieval-Augmented Generation)
+
+**Problem:** Financial analysis relies on FMP API summaries rather than raw SEC 10-K filings. The system cannot process uploaded PDFs or proprietary documents.
+
+**Impact:** Misses qualitative risk factors buried deep in 10-K footnotes (e.g., pending lawsuits, off-balance-sheet liabilities).
+
+### 15.7 No Agent Self-Evaluation or Reflection
+
+**Problem:** Agents do not evaluate the quality of their own outputs. If the Sentiment Agent returns `{ positivePercent: 200 }`, the system blindly passes this to downstream agents.
+
+**Impact:** A single hallucinated output can cascade through Risk → Decision → Report.
+
+### 15.8 No Fine-Tuned Models
+
+**Problem:** All agents use the same general-purpose Gemini 2.5 Flash model. No domain-specific fine-tuning has been applied.
+
+**Impact:** Financial terminology and nuanced risk classification may be less accurate than a fine-tuned financial model.
+
+---
+
+### 16 · Future Modifications & Advanced Roadmap
+
+### Phase 1: Immediate (Next Sprint)
+
+| Feature | Implementation |
+|---------|---------------|
+| **Semantic Cache (Redis)** | Add Redis Stack. Before triggering the workflow, hash `companyName` + 2-hour time bucket. If cache hit, return stored `GraphState` instantly (~50ms vs 15s). |
+| **Per-Agent Timeouts** | Wrap each agent's API call in `Promise.race([agentFn(), timeout(5000)])`. On timeout, fall back to mock data for that agent only, allowing the pipeline to continue. |
+| **LangSmith Integration** | Add `LANGCHAIN_TRACING_V2=true` and `LANGCHAIN_API_KEY` to enable full agent execution tracing, latency profiling, and token usage dashboards. |
+
+### Phase 2: Next Version (v2.0)
+
+| Feature | Implementation |
+|---------|---------------|
+| **Persistent Graph Storage** | Integrate `@langchain/langgraph-checkpoint-postgres` with a PostgreSQL database via Prisma ORM. Every `GraphState` is persisted with timestamps, enabling historical report retrieval. |
+| **Human-in-the-Loop** | Add an `interrupt_before` configuration on the `decisionAgent` node. The graph pauses, sends the current state to the UI, and waits for a human portfolio manager to approve or override the recommendation before generating the report. |
+| **User Auth (NextAuth.js)** | Add Google OAuth + email/password authentication. Track per-user analysis history and enforce rate limits (e.g., 10 analyses/day on free tier). |
+| **RAG Pipeline** | Integrate Pinecone or Chroma as a vector database. Allow users to upload 10-K PDFs. Chunk, embed (Gemini Embedding), and store. The Financial Agent then performs similarity search before reasoning. |
+
+### Phase 3: Long-Term Vision (v3.0)
+
+| Feature | Implementation |
+|---------|---------------|
+| **Multi-Modal Analysis** | Upgrade Research Agent to accept image inputs (earnings charts, technical analysis screenshots). Use Gemini 1.5 Pro's vision capabilities to extract data from visual sources. |
+| **Agent Self-Reflection** | Add a `ReflectionAgent` node after the Decision Agent. This agent reviews the decision's reasoning, checks for logical inconsistencies, and can trigger a re-execution of upstream agents if confidence is below threshold. |
+| **Distributed Agent Execution** | Deploy each agent as an independent serverless function (AWS Lambda / Cloudflare Workers). Use message queues (SQS/Kafka) for inter-agent communication. Enables horizontal scaling. |
+| **Prediction Backtesting** | Store past recommendations with timestamps. After 30/60/90 days, compare predicted direction against actual stock price movement. Generate accuracy metrics per agent. |
+| **Cost-Aware Model Routing** | Route simple queries (e.g., well-known large-cap companies) to cheaper/faster models (Gemini Flash), and complex queries (small-cap, limited data) to more capable models (GPT-4o, Claude Opus). |
+| **WebSocket Streaming** | Replace SSE with bidirectional WebSockets (Socket.io) to allow users to send live corrections to agents mid-execution. |
+
+---
+
+## BONUS points: Chat transcript/logs
+
+### AI Chat Sessions Transcript/Logs
+
+To see the complete process of building this application under AI guidance, refer to the detailed transcripts and logs document:
+
+👉 **[AI Collaboration Chat Logs & Transcripts](file:///c:/Users/B.PAVANKALYAN%20REDDY/Desktop/INVEST%20IQ/ai_collaboration_logs.md)**
+
+This log contains all the step-by-step interactions, design deliberations, code refactoring, API integration debugging, and deployment steps carried out by the agent and developer in collaborative synergy.
 
 ---
 
@@ -900,3 +936,4 @@ This project is licensed under the **MIT License**.
   **[⬆ Back to Top](#-investiq-ai)**
   
 </div>
+
