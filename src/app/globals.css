@@ -352,3 +352,18 @@ html, body {
 .risk-low  { color: var(--buy); }
 .risk-medium { color: var(--hold); }
 .risk-high { color: var(--pass); }
+
+/* Recharts Dark/Light Mode SVG Text Overrides */
+.recharts-polar-angle-axis-tick text,
+.recharts-polar-radius-axis-tick text,
+.recharts-cartesian-axis-tick text,
+.recharts-legend-item-text {
+  fill: var(--text-3) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.recharts-radar-chart .recharts-polar-grid-concentric,
+.recharts-radar-chart .recharts-polar-grid-angle line {
+  stroke: var(--border) !important;
+}
+

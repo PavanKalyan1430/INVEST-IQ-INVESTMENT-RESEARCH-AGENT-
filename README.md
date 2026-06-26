@@ -803,6 +803,33 @@ The Multi-Agent Decision system's outputs have been verified against multiple sc
 
 ---
 
+### Interface Screenshots
+
+Here are the visual layouts of the multi-agent system executing and delivering research reports:
+
+#### 1. AI Mission Control Terminal (Live Progress)
+![AI Mission Control Terminal](./public/images/media__1782466268723.png)
+
+#### 2. Investment Analysis Dashboard (Summary & Recommendation)
+![Analysis Report Dashboard](./public/images/media__1782466265680.png)
+
+#### 3. Deep-Dive Analytics Tab
+![Deep-Dive Analytics](./public/images/media__1782466288408.png)
+
+#### 4. Market Trends Tab (Landscape & Positioning)
+![Market Trends](./public/images/media__1782466292331.png)
+
+#### 5. Swarm Intelligence Analytics & Interactive Performance Matrix
+![Swarm Intelligence & Matrix](./public/images/media__1782466296366.png)
+
+#### 6. Bull vs Bear AI Debate & Rationale Synthesis
+![Bull vs Bear AI Debate](./public/images/media__1782466400334.png)
+
+#### 7. Sentiment and News Stream Analysis
+![News & Sentiment Analysis](./public/images/media__1782466438634.png)
+
+---
+
 ## 17 · Installation & Configuration
 
 ### Prerequisites
