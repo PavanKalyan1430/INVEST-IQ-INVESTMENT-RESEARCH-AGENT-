@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "InvestIQ AI — Institutional-Grade Investment Research",
   description:
-    "7 specialized AI agents analyze any public company and deliver structured BUY/HOLD/PASS recommendations with full financial analysis, news sentiment, and risk assessment.",
+    "7 specialized AI agents analyze any public company and deliver structured INVEST/PASS recommendations with full financial analysis, news sentiment, and risk assessment.",
   keywords: ["investment research", "AI analysis", "stock analysis", "financial AI", "LangGraph"],
 };
 

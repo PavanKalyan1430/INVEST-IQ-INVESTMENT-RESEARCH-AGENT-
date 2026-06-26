@@ -55,7 +55,7 @@ export interface RiskAnalysis {
 }
 
 export interface DecisionData {
-  recommendation: 'BUY' | 'HOLD' | 'PASS';
+  recommendation: 'INVEST' | 'PASS';
   overallScore: number;
   confidence: number;
   reasoning: string;

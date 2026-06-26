@@ -24,7 +24,7 @@ Risk Summary: Business=${risk?.businessRisk || ''}, Financial=${risk?.financialR
 
   // Standard realistic fallback mock data
   const mockFallback: DecisionData = {
-    recommendation: 'BUY',
+    recommendation: 'INVEST',
     overallScore: 84,
     confidence: 89,
     reasoning: `Based on strong financial health metrics, high return on equity, and positive news sentiment, ${companyName} represents a high-probability opportunity. Competitor risk is offset by its solid competitive moat and ongoing product updates.`,

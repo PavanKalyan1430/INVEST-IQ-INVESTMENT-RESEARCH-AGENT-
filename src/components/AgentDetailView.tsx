@@ -93,7 +93,7 @@ const AGENT_META: Record<AgentKey, {
     role: "Portfolio Manager",
     color: "#059669",
     icon: Gavel,
-    description: "The most critical agent in the pipeline — the only one authorized to issue a final investment recommendation. Reconciles bull vs. bear cases across all prior agent outputs and produces a transparent, evidence-backed BUY, HOLD, or PASS signal.",
+    description: "The most critical agent in the pipeline — the only one authorized to issue a final investment recommendation. Reconciles bull vs. bear cases across all prior agent outputs and produces a transparent, evidence-backed INVEST or PASS signal.",
     workflow: "1. Reads the complete output of all 5 prior agents from LangGraph state.\n2. Constructs a rich decision context (~1,000 tokens) with all scores, summaries, and risk factors.\n3. Sends to Gemini with an Investment Director persona.\n4. Prompt explicitly requires: reconciliation of both bullish and bearish perspectives before deciding.\n5. Returns DecisionData with recommendation, overallScore (0-100), confidence (0-100), reasoning, pros[], and cons[].",
     apis: [],
     outputKey: "decision",

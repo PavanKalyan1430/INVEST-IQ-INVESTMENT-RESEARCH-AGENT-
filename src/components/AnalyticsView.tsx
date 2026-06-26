@@ -56,7 +56,7 @@ export default function AnalyticsView({ state, companyName }: AnalyticsViewProps
   const sentScore = sentiment?.sentimentScore ?? 0;
   const riskScore = risk?.riskScore ?? 0;
   const rec = decision?.recommendation ?? "—";
-  const recColor = rec === "BUY" ? "var(--buy)" : rec === "HOLD" ? "var(--hold)" : rec === "PASS" ? "var(--pass)" : "var(--text)";
+  const recColor = rec === "INVEST" ? "var(--buy)" : rec === "PASS" ? "var(--pass)" : "var(--text)";
 
   const growth = financial?.growth ?? 0;
   const GrowthIcon = growth > 0 ? TrendingUp : growth < 0 ? TrendingDown : Minus;

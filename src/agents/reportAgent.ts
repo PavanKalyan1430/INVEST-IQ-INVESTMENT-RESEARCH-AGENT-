@@ -20,12 +20,12 @@ Decision: ${JSON.stringify(decision || {})}
   const mockFallback: ReportData = {
     summary: `${companyName} is positioned favorably in its market segments. Its high financial score of ${financial?.score || 80}/100 and favorable bullish sentiment of ${sentiment?.sentimentScore || 70}/100 supports a positive outlook, while medium-level risks of ${risk?.riskScore || 35}% indicate typical macro vulnerabilities.`,
     highlights: [
-      `Overall Score of ${decision?.overallScore || 84}/100 with a ${decision?.recommendation || 'BUY'} recommendation`,
+      `Overall Score of ${decision?.overallScore || 84}/100 with a ${decision?.recommendation || 'INVEST'} recommendation`,
       `ROE at a solid ${financial?.roe || 15}% indicating highly efficient operations`,
       `Low Financial risk channel and expanding free cash flows`
     ],
     metrics: [
-      { label: "Recommendation", value: decision?.recommendation || 'BUY' },
+      { label: "Recommendation", value: decision?.recommendation || 'INVEST' },
       { label: "Financial Health Score", value: `${financial?.score || 82}/100` },
       { label: "Risk Score", value: `${risk?.riskScore || 35}% (${risk?.riskLevel || 'Medium'})` },
       { label: "Sentiment Rating", value: `${sentiment?.sentimentScore || 78}% (${sentiment?.label || 'Bullish'})` }

@@ -21,11 +21,11 @@ interface DecisionCardProps {
 
 export default function DecisionCard({ decision, research, radarData }: DecisionCardProps) {
   const recColor =
-    decision.recommendation === "BUY" ? "var(--buy)" : decision.recommendation === "HOLD" ? "var(--hold)" : "var(--pass)";
+    decision.recommendation === "INVEST" ? "var(--buy)" : "var(--pass)";
   const recBg =
-    decision.recommendation === "BUY" ? "var(--buy-bg)" : decision.recommendation === "HOLD" ? "var(--hold-bg)" : "var(--pass-bg)";
+    decision.recommendation === "INVEST" ? "var(--buy-bg)" : "var(--pass-bg)";
   const recBorder =
-    decision.recommendation === "BUY" ? "var(--buy-border)" : decision.recommendation === "HOLD" ? "var(--hold-border)" : "var(--pass-border)";
+    decision.recommendation === "INVEST" ? "var(--buy-border)" : "var(--pass-border)";
 
   // Bull vs Bear arguments
   const bullPoints = decision.pros;
@@ -123,7 +123,7 @@ export default function DecisionCard({ decision, research, radarData }: Decision
             justifyContent: "center",
           }}>
             <span style={{ fontSize: 32, fontWeight: 900, color: recColor }}>
-              {decision.recommendation === "BUY" ? "↑" : decision.recommendation === "HOLD" ? "→" : "↓"}
+              {decision.recommendation === "INVEST" ? "↑" : "↓"}
             </span>
           </div>
           <div>

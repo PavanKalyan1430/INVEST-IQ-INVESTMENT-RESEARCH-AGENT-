@@ -52,7 +52,7 @@ export default function MarketTrendsView({ state, companyName }: MarketTrendsVie
         </div>
         <div className="card" style={{ padding: 20, borderLeft: "3px solid var(--accent)" }}>
           <div style={{ fontSize: 11, color: "var(--text-4)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Investment Signal</div>
-          <div style={{ fontSize: 22, fontWeight: 800, color: decision?.recommendation === "BUY" ? "var(--buy)" : decision?.recommendation === "PASS" ? "var(--pass)" : "var(--hold)" }}>
+          <div style={{ fontSize: 22, fontWeight: 800, color: decision?.recommendation === "INVEST" ? "var(--buy)" : "var(--pass)" }}>
             {decision?.recommendation ?? "—"}
           </div>
           <div style={{ fontSize: 12, color: "var(--text-4)", marginTop: 4 }}>

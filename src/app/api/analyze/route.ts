@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
               sendEvent('thought', 'Reconciling bull vs bear perspectives for final decision...');
               await sleep(1200);
               sendEvent('status', { agent: 'decision', status: 'completed' });
-              sendEvent('discovery', `Decision: ${nodeOutput.decision?.recommendation || 'BUY'}`);
+              sendEvent('discovery', `Decision: ${nodeOutput.decision?.recommendation || 'INVEST'}`);
             } 
             else if (nodeName === 'reportAgent') {
               sendEvent('status', { agent: 'report', status: 'running' });

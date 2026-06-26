@@ -21,8 +21,7 @@ export default function RecommendationCard({
   const rec = decision.recommendation;
 
   const palette = {
-    BUY:  { bg: "var(--buy-bg)",  border: "var(--buy-border)",  color: "var(--buy)",  shadow: "rgba(5,150,105,0.12)",  label: "Strong Buy Signal" },
-    HOLD: { bg: "var(--hold-bg)", border: "var(--hold-border)", color: "var(--hold)", shadow: "rgba(217,119,6,0.12)",   label: "Hold Position" },
+    INVEST: { bg: "var(--buy-bg)",  border: "var(--buy-border)",  color: "var(--buy)",  shadow: "rgba(5,150,105,0.12)",  label: "Strong Invest Signal" },
     PASS: { bg: "var(--pass-bg)", border: "var(--pass-border)", color: "var(--pass)", shadow: "rgba(220,38,38,0.12)",   label: "Pass / Avoid" },
   }[rec] ?? { bg: "var(--surface-2)", border: "var(--border)", color: "var(--text)", shadow: "transparent", label: rec };
 

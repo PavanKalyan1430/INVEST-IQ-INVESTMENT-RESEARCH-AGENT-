@@ -20,7 +20,7 @@ const AGENTS = [
   { name: "News Agent", icon: Database, color: "#7C3AED", desc: "Aggregates the latest global headlines and classifies news tone." },
   { name: "Sentiment Agent", icon: MessageSquare, color: "#D97706", desc: "Scores market sentiment as Bullish, Bearish, or Neutral from news flows." },
   { name: "Risk Agent", icon: AlertTriangle, color: "#DC2626", desc: "Synthesizes all signals into a 5-channel risk matrix and overall risk score." },
-  { name: "Decision Agent", icon: CheckCircle, color: "#059669", desc: "Reconciles bull and bear cases to issue a final BUY, HOLD, or PASS recommendation." },
+  { name: "Decision Agent", icon: CheckCircle, color: "#059669", desc: "Reconciles bull and bear cases to issue a final INVEST or PASS recommendation." },
   { name: "Report Agent", icon: FileText, color: "#6B7280", desc: "Compiles everything into a UI-ready interactive report with charts and metrics." },
 ];
 
@@ -46,7 +46,7 @@ const WORKFLOW_STEPS = [
   {
     step: "04",
     title: "Report Delivered",
-    desc: "An institutional-quality investment thesis with a transparent BUY, HOLD, or PASS recommendation is delivered in under 30 seconds.",
+    desc: "An institutional-quality investment thesis with a transparent INVEST or PASS recommendation is delivered in under 30 seconds.",
     color: "#059669",
   },
 ];
@@ -139,8 +139,7 @@ export default function Hero({ onAnalyze, loading }: HeroProps) {
           }}
         >
           7 specialized AI agents analyze any public company in under 30 seconds and deliver a
-          transparent <strong style={{ color: "var(--text-2)", fontWeight: 700 }}>BUY</strong>,{" "}
-          <strong style={{ color: "var(--text-2)", fontWeight: 700 }}>HOLD</strong>, or{" "}
+          transparent <strong style={{ color: "var(--text-2)", fontWeight: 700 }}>INVEST</strong> or{" "}
           <strong style={{ color: "var(--text-2)", fontWeight: 700 }}>PASS</strong> recommendation.
         </p>
 
